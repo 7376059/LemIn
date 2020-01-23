@@ -12,7 +12,6 @@
 
 #include "lemin.h"
 
-
 void print_matrix(char **str)
 {
 	int i;
@@ -36,8 +35,6 @@ void print_matrix(char **str)
 	}
 }
 
-
-
 char **init_matrix()
 {
 	char **matrix;
@@ -60,32 +57,21 @@ char **init_matrix()
 	return (matrix);
 }
 
-char **init_names()
-{
-	char **names;
-
-	names = (char**)malloc(sizeof(char*) * 100);
-	return (names);
-	
-}
-
-
 t_graph *init_graph()
 {
 	t_graph *rez;
 
 	rez = (t_graph*)malloc(sizeof(t_graph));
-	rez->names = init_names();
+	rez->vector = init_vector();
 	rez->matrix = init_matrix();
 	g_size = 100;
 	g_rooms = 0;
 	return (rez);
 }
 
-
-
 int main(void)
-{
+{	
+	/*
  	int fd = open("./map", O_RDONLY);	
 	char *line;
 
@@ -93,8 +79,36 @@ int main(void)
 
 	while ((get_next_line(fd, &line) == 1))
 	{
-				
 	}
-
+	*/
+	
+	t_graph *gr = init_graph();
+	/*	
+	int i;
+	gr->vector = vector_push(gr->vector,"kek");
+	gr->vector = vector_push(gr->vector,"kek");
+	gr->vector = vector_push(gr->vector,"kek");
+	gr->vector = vector_push(gr->vector,"kek");
+	gr->vector = vector_push(gr->vector,"lol");
+	while (i < gr->vector->elems)
+	{
+		printf("%s\n", gr->vector->names[i]);
+		i++;
+	}
+	printf ("size = %d\n", gr->vector->size);
+	printf ("elems = %d\n", gr->vector->elems);	
+	*/
 	return (0);
 }
+
+
+
+
+
+
+
+
+
+
+
+
