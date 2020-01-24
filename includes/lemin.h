@@ -15,22 +15,28 @@
 # include <stdio.h>
 
 int g_ants;
-int g_rooms;
-int g_size;
 int g_start;
 int g_end;
 
 typedef struct s_vector
 {
-	int	size;
-	int elems;
-	char **names;
+	int	size;	// текущий полный размер вектра
+	int elems; // кол-во заполненых элементов
+	char **names; // массив с именами
 }			 t_vector;
+
+typedef struct s_edge
+{
+	int a;
+	int b;
+	int cost;
+	struct s_edge *next;
+}				t_edge;
 
 
 typedef struct s_graph
 {	
-	char  **matrix;
+	struct s_edge	*edges;
 	struct s_vector *vector;
 }				t_graph;
 
@@ -38,3 +44,14 @@ typedef struct s_graph
 t_vector *realloc_vector(t_vector *temp, char *line);
 t_vector *vector_push(t_vector *temp, char *line);
 t_vector    *init_vector();
+t_edge *add_edge(t_edge *start, int a, int b);
+t_edge *init_edge(int a, int b);
+
+t_graph *start_parser(t_graph *gr);
+t_graph *init_graph();
+void print_edges(t_graph *gr);
+void print_names(t_graph *gr);
+
+void throw_error(t_graph *gr);
+int get_mas_length(char **mas);
+void clear_mas(char **mas);

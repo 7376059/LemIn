@@ -32,7 +32,7 @@ t_vector *vector_push(t_vector *temp, char *line)
 {
 	if (temp->elems < temp->size)
 	{
-		temp->names[temp->elems] = line;
+		temp->names[temp->elems] = ft_strdup(line);
 		temp->elems++;
 	}
 	else
