@@ -6,7 +6,7 @@
 /*   By: dgrady <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/18 19:18:10 by dgrady            #+#    #+#             */
-/*   Updated: 2020/01/19 17:28:40 by dgrady           ###   ########.fr       */
+/*   Updated: 2020/01/26 18:29:37 by dgrady           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,15 +28,23 @@ typedef struct s_vector
 typedef struct s_edge
 {
 	int a;
-	int b;
 	int cost;
 	struct s_edge *next;
-}				t_edge;
+}			  t_edge;
+
+
+typedef struct s_vertex
+{
+	int room;
+	struct s_edge	*edges;
+	struct s_vertex	*next;
+}				t_vertex;
+
 
 
 typedef struct s_graph
 {	
-	struct s_edge	*edges;
+	struct s_vertex	*vertex;
 	struct s_vector *vector;
 }				t_graph;
 
@@ -44,8 +52,11 @@ typedef struct s_graph
 t_vector *realloc_vector(t_vector *temp, char *line);
 t_vector *vector_push(t_vector *temp, char *line);
 t_vector    *init_vector();
-t_edge *add_edge(t_edge *start, int a, int b);
-t_edge *init_edge(int a, int b);
+t_edge *add_edge(t_edge *start, int a);
+t_edge *init_edge(int a);
+t_vertex *add_vertex(t_vertex *start, int number);
+t_vertex *init_vertex(int number);
+
 
 t_graph *start_parser(t_graph *gr);
 t_graph *init_graph();

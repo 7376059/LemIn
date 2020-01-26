@@ -6,7 +6,7 @@
 /*   By: dgrady <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/19 16:01:51 by dgrady            #+#    #+#             */
-/*   Updated: 2020/01/19 17:56:22 by dgrady           ###   ########.fr       */
+/*   Updated: 2020/01/26 18:35:50 by dgrady           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int validate_name(char **name)
 {
 	int i;
-	
+
 	i = -1;
 	if (name[0][0] == 'L')
 		return (0);
@@ -24,10 +24,26 @@ int validate_name(char **name)
 			return (0);
 	i = -1;
 	while(name[2][++i])
-        if (!ft_isdigit(name[2][i]))
-            return (0);
+		if (!ft_isdigit(name[2][i]))
+			return (0);
 	return (1);
 }
+
+t_graph *get_name(t_graph *gr, char **line)
+{
+	static int i = -1;
+
+	i++;
+	if (!(validate_name(line)))
+		throw_error(gr);
+	if(gr->vertex == NULL)
+		gr->vertex = init_vertex(i);
+	else
+		 gr->vertex = add_vertex(gr->vertex, i);
+	gr->vector = vector_push(gr->vector, line[0]);
+	return (gr);
+}
+
 
 int get_number(t_graph *gr, char *name)
 {
@@ -39,7 +55,6 @@ int get_number(t_graph *gr, char *name)
 			return (i);
 	return (-1);
 }
-
 
 int validate_edge(t_graph *gr, char **name)
 {
@@ -53,34 +68,41 @@ int validate_edge(t_graph *gr, char **name)
 			flag++;
 	i = -1;
 	while(++i < gr->vector->elems)
-        if(ft_strcmp(name[1], gr->vector->names[i]) == 0)
-            flag++;
+		if(ft_strcmp(name[1], gr->vector->names[i]) == 0)
+			flag++;
 	if (flag == 2)
 		return (1);
-	printf("flag = %d\n", flag);
-	printf ("%s   %s\n", name[0], name[1]);
+	//printf("flag = %d\n", flag);
+	//printf ("%s   %s\n", name[0], name[1]);
 	return (0);
 }
 
 
-t_graph *get_name(t_graph *gr, char **line)
-{
-	if (!(validate_name(line)))
-		throw_error(gr);
-	gr->vector = vector_push(gr->vector, line[0]);
-	return (gr);
-}
-
 t_graph *get_edge(t_graph *gr, char **line)
 {
+	int first;
+	int second;
+	int i;
+	int j;
+
+	t_vertex *temp;
+	
+	temp = gr->vertex;
 	if (!validate_edge(gr, line))
 		throw_error(gr);
 	if (g_start == -1 || g_end == -1)
 		throw_error(gr);
-	if(gr->edges == NULL)
-		gr->edges = init_edge(get_number(gr, line[0]), get_number(gr, line[1]));
-	else
-		gr->edges = add_edge(gr->edges, get_number(gr, line[0]), get_number(gr, line[1]));
+	first = get_number(gr, line[0]);
+	second = get_number(gr, line[1]);
+	i = 0;
+	while(i++ < first)
+		temp = temp->next;
+	temp->edges = add_edge(temp->edges, second);
+	temp = gr->vertex;
+	i = 0;
+	while(i++ < second)
+		temp = temp->next;
+	temp->edges = add_edge(temp->edges, first);
 	return (gr);
 }
 
@@ -112,7 +134,7 @@ t_graph *start_parser(t_graph *gr)
 			if (flag == 0 && get_mas_length(split) == 3)
 				gr = get_name(gr, split);
 			else if (get_mas_length(split) == 1)
-			{
+			{	
 				flag = 1;
 				clear_mas(split);
 				split = ft_strsplit(line, '-');

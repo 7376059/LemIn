@@ -12,13 +12,22 @@ void print_names(t_graph *gr)
 
 void print_edges(t_graph *gr)
 {
-	t_edge *temp;
-	
-	temp = gr->edges;
-	printf("Edges:\n");
+	t_vertex *temp;
+	t_edge  *temp2;
+
+	temp = gr->vertex;
+	printf("Spisok:\n");
 	while(temp)
 	{
-		printf("%d-%d cost = %d\n", temp->a, temp->b, temp->cost);
+		printf ("Vertex: %d ", temp->room);
+		temp2 = temp->edges;
+		printf("Edges: ");
+		while(temp2)
+		{
+			printf ("%d ", temp2->a);
+			temp2 = temp2->next;
+		}
+		printf("\n");
 		temp = temp->next;
 	}
 }
@@ -29,7 +38,7 @@ t_graph *init_graph()
 
     rez = (t_graph*)malloc(sizeof(t_graph));
     rez->vector = init_vector();
-    rez->edges = NULL;
+    rez->vertex = NULL;
     return (rez);
 }
 
