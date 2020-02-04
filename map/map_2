@@ -1,0 +1,18 @@
+11
+##end
+A 0 0
+B 0 0
+C 0 0
+F 0 0
+N 0 0
+l 0 0
+##start
+G 0 0
+H 0 0
+A-B
+B-N
+N-l
+l-F
+F-C
+C-H
+H-G

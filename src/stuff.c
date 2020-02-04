@@ -19,12 +19,12 @@ void print_edges(t_graph *gr)
 	printf("Spisok:\n");
 	while(temp)
 	{
-		printf ("Vertex: %d ", temp->room);
+		printf ("Vertex: %d\n", temp->room);
 		temp2 = temp->edges;
-		printf("Edges: ");
+		printf("  Edges:");
 		while(temp2)
 		{
-			printf ("%d ", temp2->a);
+			printf ("\n    to: %d (%d)", temp2->to, temp2->cost);
 			temp2 = temp2->next;
 		}
 		printf("\n");

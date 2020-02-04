@@ -28,7 +28,7 @@ t_edge *init_edge(int a)
 	
 	rez = (t_edge*)malloc(sizeof(t_edge));
 	rez->cost = 1;
-	rez->a = a;
+	rez->to = a;
 	rez->next = NULL;
 	return (rez);
 }

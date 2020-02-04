@@ -6,7 +6,7 @@
 /*   By: dgrady <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/18 19:18:10 by dgrady            #+#    #+#             */
-/*   Updated: 2020/01/26 18:29:37 by dgrady           ###   ########.fr       */
+/*   Updated: 2020/02/04 21:34:59 by efriesen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,12 @@ int g_ants;
 int g_start;
 int g_end;
 
+int g_INF;
+
+int	*g_dest;
+int *g_visit;
+int	*g_parent;
+
 typedef struct s_vector
 {
 	int	size;	// текущий полный размер вектра
@@ -27,7 +33,7 @@ typedef struct s_vector
 
 typedef struct s_edge
 {
-	int a;
+	int to;
 	int cost;
 	struct s_edge *next;
 }			  t_edge;
@@ -35,19 +41,21 @@ typedef struct s_edge
 
 typedef struct s_vertex
 {
-	int room;
+	int room; // непонятно мб не нужна
 	struct s_edge	*edges;
 	struct s_vertex	*next;
 }				t_vertex;
 
 
 
-typedef struct s_graph
+typedef struct s_graph 
 {	
 	struct s_vertex	*vertex;
 	struct s_vector *vector;
 }				t_graph;
 
+
+void	algo_dijkstra(t_graph *graph);
 
 t_vector *realloc_vector(t_vector *temp, char *line);
 t_vector *vector_push(t_vector *temp, char *line);
