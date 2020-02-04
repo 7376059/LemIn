@@ -24,6 +24,16 @@ int	*g_dest;
 int *g_visit;
 int	*g_parent;
 
+
+typedef struct s_path
+{
+	int size; //размер массива ways
+	int **ways = // [0]104 все муравьи пройдут за 1 ход за 1 
+		     // [1]501234
+	
+}
+
+
 typedef struct s_vector
 {
 	int	size;	// текущий полный размер вектра
