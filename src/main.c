@@ -30,13 +30,17 @@ int main(void)
 {	
 	g_start = -1;
 	g_end = -1;
-
+    
 	t_graph *gr = init_graph();
 	gr = start_parser(gr);
 
+    /*
 	print_graph(gr);
 
 	algo_dijkstra(gr);
+    */
 
+    t_path *kek = init_path();
+    printf("Ants %d\n Steps %d\n", g_ants, counter(kek));
 	return (0);
 }

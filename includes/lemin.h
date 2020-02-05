@@ -28,10 +28,9 @@ int	*g_parent;
 typedef struct s_path
 {
 	int size; //размер массива ways
-	int **ways = // [0]104 все муравьи пройдут за 1 ход за 1 
+	int **ways; // [0]104 все муравьи пройдут за 1 ход за 1 
 		     // [1]501234
-	
-}
+}	t_path;
 
 
 typedef struct s_vector
@@ -84,3 +83,5 @@ void print_names(t_graph *gr);
 void throw_error(t_graph *gr);
 int get_mas_length(char **mas);
 void clear_mas(char **mas);
+t_path *init_path(void);
+int counter(t_path *path);
