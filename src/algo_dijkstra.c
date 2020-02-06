@@ -6,7 +6,7 @@
 /*   By: efriesen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/03 21:44:17 by efriesen          #+#    #+#             */
-/*   Updated: 2020/02/04 21:34:55 by efriesen         ###   ########.fr       */
+/*   Updated: 2020/02/06 19:13:53 by efriesen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,29 +15,17 @@
 // malloc error .. ?
 // free
 
-// недостижимые вершины
+// недостижимые вершины 
 
 // кол-во муравьев меньше кратчайшего пути
 
 // алгоритм суурбале не до конца
 
-void	print_way(char **names)
-{
-	int	ver;
-
-	ver = g_end;
-
-	while (ver != -1)
-	{
-		printf("%s", names[ver]);
-		if ((ver = g_parent[ver]) != -1)
-			printf(" --- ");
-	}
-	printf("\n");
-}
+// дейкстра брейкнулся => путей нет, суурбале стоп
 
 void	create_arr(int size)
 {
+	// free
 	int	i;
 	
 	g_INF = 10000000;
@@ -87,6 +75,4 @@ void	algo_dijkstra(t_graph *graph)
 			edge = edge->next;
 		}
 	}
-
-	print_way(graph->vector->names); // print
 }

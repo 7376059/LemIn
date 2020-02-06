@@ -1,5 +1,32 @@
 # include "lemin.h"
 
+void    print_way(char **names)
+{
+	int ver;
+
+	ver = g_end;
+
+	while (ver != -1)
+	{
+		printf("%s", names[ver]);
+		if ((ver = g_parent[ver]) != -1)
+			printf(" --- ");
+	}
+	printf("\n");
+}
+
+void    print_graph(t_graph *gr)
+{
+	print_names(gr);
+
+	printf("\nstart_room  = %d\nend_room = %d\n", g_start, g_end);
+	printf("\nsize = %d\nelems = %d\n\n", gr->vector->size, gr->vector->elems);
+
+	print_edges(gr);
+
+	printf("\nFinito La Comedia\n");
+}
+
 void print_names(t_graph *gr)
 {
 	int i;
@@ -34,45 +61,45 @@ void print_edges(t_graph *gr)
 
 t_graph *init_graph()
 {
-    t_graph *rez;
+	t_graph *rez;
 
-    rez = (t_graph*)malloc(sizeof(t_graph));
-    rez->vector = init_vector();
-    rez->vertex = NULL;
-    return (rez);
+	rez = (t_graph*)malloc(sizeof(t_graph));
+	rez->vector = init_vector();
+	rez->vertex = NULL;
+	return (rez);
 }
 
 void clear_mas(char **mas)
 {
-    int i;
+	int i;
 
-    i = -1;
-    while (mas[++i])
-        free(mas[i]);
-    free(mas);
+	i = -1;
+	while (mas[++i])
+		free(mas[i]);
+	free(mas);
 }
 
 
 int get_mas_length(char **mas)
 {
-    int i;
+	int i;
 
-    i = -1;
-    while(mas[++i])
-        ;
-    return (i);
+	i = -1;
+	while(mas[++i])
+		;
+	return (i);
 }
 
 void throw_error(t_graph *gr)
 {
-    // чистим структуруi
-	
+	// чистим структуруi
+
 	int i;
 	i = -1;
 	while (++i < gr->vector->elems)
 	{
 		printf("%d  %s\n", i, gr->vector->names[i]);
 	}
-    write(1, "Error\n", 6);
-    exit(0);
+	write(1, "Error\n", 6);
+	exit(0);
 }

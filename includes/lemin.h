@@ -6,7 +6,7 @@
 /*   By: dgrady <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/18 19:18:10 by dgrady            #+#    #+#             */
-/*   Updated: 2020/02/04 21:34:59 by efriesen         ###   ########.fr       */
+/*   Updated: 2020/02/06 19:11:21 by efriesen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ int	*g_dest;
 int *g_visit;
 int	*g_parent;
 
+int g_size; // ?
+int	**g_ways; // ?
 
 typedef struct s_path
 {
@@ -50,7 +52,7 @@ typedef struct s_edge
 
 typedef struct s_vertex
 {
-	int room; // непонятно мб не нужна
+	int room;
 	struct s_edge	*edges;
 	struct s_vertex	*next;
 }				t_vertex;
@@ -63,7 +65,10 @@ typedef struct s_graph
 	struct s_vector *vector;
 }				t_graph;
 
+void    print_graph(t_graph *gr);
+void	print_way(char **names);
 
+void	algo_suurbale(t_graph *graph);
 void	algo_dijkstra(t_graph *graph);
 
 t_vector *realloc_vector(t_vector *temp, char *line);

@@ -1,18 +1,24 @@
 11
-##end
+##start
 A 0 0
 B 0 0
 C 0 0
+##end
 F 0 0
 N 0 0
 l 0 0
-##start
+K 0 0
 G 0 0
 H 0 0
+A-G
 A-B
-B-N
-N-l
-l-F
-F-C
-C-H
-H-G
+A-N
+G-H
+B-C
+B-K
+N-C
+H-C
+C-F
+K-l
+H-F
+F-l
