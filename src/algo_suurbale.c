@@ -137,10 +137,14 @@ void	algo_suurbale(t_graph *graph)
 	t_path *paths = (t_path*)malloc(sizeof(t_path));
 	paths->size = 0;
 
+	init_path(&paths);
 	// while
 	//print_graph(graph);
 
 	algo_dijkstra(graph);
+	
+	add_way  
+	
 	print_way(graph->vector->names);
 	
 	//add_way(paths); // если дейкстра доработал
