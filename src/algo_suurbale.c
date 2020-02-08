@@ -6,7 +6,7 @@
 /*   By: efriesen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/06 18:21:05 by efriesen          #+#    #+#             */
-/*   Updated: 2020/02/07 21:53:28 by efriesen         ###   ########.fr       */
+/*   Updated: 2020/02/08 18:09:49 by efriesen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,9 +67,34 @@ void	remove_way(t_graph *graph)
 	t_edge		*edge;
 	int			i;
 	int			j;
+	int 		k;
 
 	i = g_end;
 	while (i != -1)
+	{
+		vertex = graph->vertex;
+		j = g_parent[i];
+
+		k = -1;
+		while (++k < j)
+			vertex = vertex->next;
+
+		if (j != -1)
+		{
+			edge = vertex->edges;
+			while (edge)
+			{
+				if (edge->to == i)
+					break ;
+				edge = edge->next;
+			}
+			remove_list_elem(&vertex->edges, edge);
+		}
+		i = j;
+	}
+	
+
+	/*while (i != -1)
 	{
 		vertex = graph->vertex;
 		j = -1;
@@ -87,7 +112,7 @@ void	remove_way(t_graph *graph)
 			}
 			remove_list_elem(&vertex->edges, edge);
 		}
-	}
+	}*/
 }
 
 void	modific_cost(t_vertex *vertex)
