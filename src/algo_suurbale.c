@@ -6,7 +6,7 @@
 /*   By: efriesen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/06 18:21:05 by efriesen          #+#    #+#             */
-/*   Updated: 2020/02/08 18:09:49 by efriesen         ###   ########.fr       */
+/*   Updated: 2020/02/11 21:44:23 by efriesen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ int		get_length(void)
 	j = g_end;
 	while (j != -1)
 	{
-		printf("[%d]", j);
 		i++;
 		j = g_parent[j];
 	}
@@ -143,10 +142,56 @@ void	init_path(t_path **path)
 	(*path)->max_ways = 100;
 	(*path)->max_path = 100;
 	(*path)->size = 0;
+	(*path)->final_steps = 0;
 	(*path)->ways = (int**)malloc(sizeof(int*) * 100);
 	i = -1;
 	while (++i < 100)
 		(*path)->ways[i] = (int*)malloc(sizeof(int) * 100);
+}
+
+void	modific_ways(t_path **path, int i, int j, int k)
+{
+	int u;
+
+	u = 0;
+	while (i + ++u < (*path)->ways[(*path)->size][0] + 1)
+		(*path)->ways[(*path)->size + 1][u]
+			= (*path)->ways[(*path)->size][i + u];
+	(*path)->ways[(*path)->size + 1][0] = u - 1;
+	
+	//for (int i = 0 ; i < 5; i++)
+	//	printf("%d ", (*path)->ways[(*path)->size + 1][i]);
+
+	u = 0;
+	while (k < (*path)->ways[j][0] + 1)
+			(*path)->ways[(*path)->size][
+}
+
+void	detect_common_edge(t_path **path)
+{
+	int i;
+	int	j;
+	int	k;
+
+	i = 0;
+	while (++i < (*path)->ways[(*path)->size][0] - 1)
+	{
+		j = -1;
+		while (++j < (*path)->size)
+		{
+			k = 1;
+			while (++k < (*path)->ways[j][0])
+			{
+				if (((*path)->ways[(*path)->size][i] == (*path)->ways[j][k])
+						&& ((*path)->ways[(*path)->size][i + 1]
+							== (*path)->ways[j][k - 1]))
+				{
+					modific_ways(path, i + 1, j, k + 1);
+					// break ;
+				}
+			}
+		}
+	}
 }
 
 void	add_way(t_path **path)
@@ -154,11 +199,9 @@ void	add_way(t_path **path)
 	int length;
 	int i;
 	
-	//printf("[%d]\n", get_length());
-	
 	if ((length = get_length()) > (*path)->max_path - 1)
 	;//extend_path(path);
-	if ((*path)->size == (*path)->max_ways)
+	if ((*path)->size == (*path)->max_ways - 1)
 	;//extend_ways(path);
 	
 	(*path)->ways[(*path)->size][0] = length;
@@ -170,49 +213,38 @@ void	add_way(t_path **path)
 		i = g_parent[i];
 	}
 	
+	detect_common_edge(path);
 	(*path)->size++;
 }
 
 void	algo_suurbale(t_graph *graph)
 {
 	t_path *paths;
-
+	t_path	*best_choice;
+	
+	//print_graph(graph);
+	
 	init_path(&paths);
-	// while
-	print_graph(graph);
+	while (1)
+	{
+		algo_dijkstra(graph);
+		//if (unreachable_vertex()) ... ? 
+		//	;
 
-	algo_dijkstra(graph);
-	add_way(&paths);
-	//add_way
-	
-	//print_way(graph->vector->names);
-	
-	//add_way(paths); // если дейкстра доработал
-	
-	//delete edges before modific cost
-	
-	//print_edges(graph);
+		if (g_dest[g_end] == g_INF)
+			break ;
 
-	modific_cost(graph->vertex);
+		print_way(graph->vector->names);
 
-	remove_way(graph);
+		add_way(&paths);
+		remove_way(graph);
+		modific_cost(graph->vertex);
 
-	//print_edges(graph);
+		//print_edges(graph);
+	}
 
-	algo_dijkstra(graph);
 	
-	//print_way(graph->vector->names);
-	add_way(&paths);
-	
-	
-	remove_way(graph);
-	
-	algo_dijkstra(graph);
-	
-	//print_way(graph->vector->names);
-	add_way(&paths);
-	
-	for (int i = 0; i < 10; i++)
+	/*for (int i = 0; i < 10; i++)
 	{
 		printf("[%d] ", paths->ways[i][0]);
 		for (int j = 1; j < paths->ways[i][0] + 1; j++)
@@ -220,5 +252,5 @@ void	algo_suurbale(t_graph *graph)
 			printf("%d ", paths->ways[i][j]);
 		}
 		printf("\n");
-	}
+	}*/
 }

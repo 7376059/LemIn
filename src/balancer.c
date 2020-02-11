@@ -71,9 +71,9 @@ t_path *balancer(t_path *path)
     {
 
         sum += path->steps[i];
-        printf("%d \t", path->steps[i]);
-        printf("%d \t", path->ways[i][0]) - 1;
-        printf("%d\n", rez[i]);
+        //printf("%d \t", path->steps[i]);
+        //printf("%d \t", path->ways[i][0]) - 1;
+        //printf("%d\n", rez[i]);
     }
     printf("ants checksum = %d\n", sum);
     path->steps = min_gap(path->steps, rez, path->step_elems);
@@ -86,9 +86,9 @@ t_path *balancer(t_path *path)
     {
 
         sum += path->steps[i];
-        printf("%d \t", path->steps[i]);
-        printf("%d \t", path->ways[i][0]) - 1;
-        printf("%d\n", rez[i]);
+        //printf("%d \t", path->steps[i]);
+        //printf("%d \t", path->ways[i][0]) - 1;
+        //printf("%d\n", rez[i]);
     }
     printf("ants checksum = %d\n", sum);
     
