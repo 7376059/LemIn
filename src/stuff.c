@@ -22,7 +22,7 @@ void    print_graph(t_graph *gr)
 	printf("\nstart_room  = %d\nend_room = %d\n", g_start, g_end);
 	printf("\nsize = %d\nelems = %d\n\n", gr->vector->size, gr->vector->elems);
 
-	print_edges(gr);
+	//print_edges(gr);
 
 	printf("\nFinito La Comedia\n");
 }

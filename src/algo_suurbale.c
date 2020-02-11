@@ -27,6 +27,7 @@ int		get_length(void)
 	j = g_end;
 	while (j != -1)
 	{
+		printf("[%d]", j);
 		i++;
 		j = g_parent[j];
 	}
@@ -178,13 +179,13 @@ void	algo_suurbale(t_graph *graph)
 
 	init_path(&paths);
 	// while
-	//print_graph(graph);
+	print_graph(graph);
 
 	algo_dijkstra(graph);
 	add_way(&paths);
 	//add_way
 	
-	print_way(graph->vector->names);
+	//print_way(graph->vector->names);
 	
 	//add_way(paths); // если дейкстра доработал
 	
@@ -199,11 +200,16 @@ void	algo_suurbale(t_graph *graph)
 	//print_edges(graph);
 
 	algo_dijkstra(graph);
-	print_way(graph->vector->names);
+	
+	//print_way(graph->vector->names);
 	add_way(&paths);
+	
+	
 	remove_way(graph);
+	
 	algo_dijkstra(graph);
-	print_way(graph->vector->names);
+	
+	//print_way(graph->vector->names);
 	add_way(&paths);
 	
 	for (int i = 0; i < 10; i++)
