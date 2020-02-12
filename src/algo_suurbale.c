@@ -6,7 +6,7 @@
 /*   By: efriesen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/06 18:21:05 by efriesen          #+#    #+#             */
-/*   Updated: 2020/02/11 21:44:23 by efriesen         ###   ########.fr       */
+/*   Updated: 2020/02/12 19:49:50 by efriesen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int		get_length(void)
 {
 	int i;
 	int	j;
-	
+
 	i = -1;
 	j = g_end;
 	while (j != -1)
@@ -52,7 +52,7 @@ void	remove_list_elem(t_edge **begin, t_edge *remove)
 		prev_edge = edge;
 		edge = edge->next;
 	}
-	
+
 	if (prev_edge == NULL)
 		*begin = (*begin)->next;
 	else if (edge->next == NULL)
@@ -93,32 +93,11 @@ void	remove_way(t_graph *graph)
 		}
 		i = j;
 	}
-	
-
-	/*while (i != -1)
-	{
-		vertex = graph->vertex;
-		j = -1;
-		while (++j < i)
-			vertex = vertex->next;
-		i = g_parent[i];
-		if (i != -1)
-		{
-			edge = vertex->edges;
-			while (edge)
-			{
-				if (edge->to == i)
-					break ;
-				edge = edge->next;
-			}
-			remove_list_elem(&vertex->edges, edge);
-		}
-	}*/
 }
 
 void	modific_cost(t_vertex *vertex)
 {
-	
+
 	t_edge *edges;
 
 	while (vertex)
@@ -137,7 +116,7 @@ void	modific_cost(t_vertex *vertex)
 void	init_path(t_path **path)
 {
 	int i;
-	
+
 	*path = (t_path*)malloc(sizeof(t_path));
 	(*path)->max_ways = 100;
 	(*path)->max_path = 100;
@@ -151,6 +130,15 @@ void	init_path(t_path **path)
 
 void	modific_ways(t_path **path, int i, int j, int k)
 {
+	for (int i = 0; i < 5; i++)
+	{
+		printf("[%d] ", (*path)->ways[i][0]);
+		for (int j = 1; j < (*path)->ways[i][0] + 1; j++)
+			printf("%d ", (*path)->ways[i][j]);
+		printf("\n");
+	}
+
+
 	int u;
 
 	u = 0;
@@ -158,13 +146,18 @@ void	modific_ways(t_path **path, int i, int j, int k)
 		(*path)->ways[(*path)->size + 1][u]
 			= (*path)->ways[(*path)->size][i + u];
 	(*path)->ways[(*path)->size + 1][0] = u - 1;
-	
-	//for (int i = 0 ; i < 5; i++)
-	//	printf("%d ", (*path)->ways[(*path)->size + 1][i]);
 
-	u = 0;
-	while (k < (*path)->ways[j][0] + 1)
-			(*path)->ways[(*path)->size][
+	u = -1;
+	while (k + ++u < (*path)->ways[j][0] + 1)
+		(*path)->ways[(*path)->size][i + u] = (*path)->ways[j][k + u];
+	(*path)->ways[(*path)->size][0] = i + u - 1;	
+
+	u = -1;
+	while (++u < (*path)->ways[(*path)->size + 1][0] + 1)
+		(*path)->ways[j][k + u - 1] = (*path)->ways[(*path)->size + 1][u + 1];
+	(*path)->ways[j][0] = u + k - 3;
+
+	printf("\n");
 }
 
 void	detect_common_edge(t_path **path)
@@ -198,12 +191,12 @@ void	add_way(t_path **path)
 {
 	int length;
 	int i;
-	
+
 	if ((length = get_length()) > (*path)->max_path - 1)
-	;//extend_path(path);
+		;//extend_path(path);
 	if ((*path)->size == (*path)->max_ways - 1)
-	;//extend_ways(path);
-	
+		;//extend_ways(path);
+
 	(*path)->ways[(*path)->size][0] = length;
 	i = g_end;
 
@@ -212,7 +205,7 @@ void	add_way(t_path **path)
 		(*path)->ways[(*path)->size][length--] = i;
 		i = g_parent[i];
 	}
-	
+
 	detect_common_edge(path);
 	(*path)->size++;
 }
@@ -221,9 +214,9 @@ void	algo_suurbale(t_graph *graph)
 {
 	t_path *paths;
 	t_path	*best_choice;
-	
-	//print_graph(graph);
-	
+
+	print_graph(graph);
+
 	init_path(&paths);
 	while (1)
 	{
@@ -234,7 +227,7 @@ void	algo_suurbale(t_graph *graph)
 		if (g_dest[g_end] == g_INF)
 			break ;
 
-		print_way(graph->vector->names);
+		//print_way(graph->vector->names);
 
 		add_way(&paths);
 		remove_way(graph);
@@ -243,8 +236,8 @@ void	algo_suurbale(t_graph *graph)
 		//print_edges(graph);
 	}
 
-	
-	/*for (int i = 0; i < 10; i++)
+
+	for (int i = 0; i < 5; i++)
 	{
 		printf("[%d] ", paths->ways[i][0]);
 		for (int j = 1; j < paths->ways[i][0] + 1; j++)
@@ -252,5 +245,5 @@ void	algo_suurbale(t_graph *graph)
 			printf("%d ", paths->ways[i][j]);
 		}
 		printf("\n");
-	}*/
+	}
 }
