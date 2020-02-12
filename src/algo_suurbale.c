@@ -18,6 +18,17 @@
  * 	printf("+");
  * */
 
+void	print_ways(t_path **path)
+{
+	for (int i = 0; i < 5; i++)
+	{
+		printf("[%d] ", (*path)->ways[i][0]);
+		for (int j = 1; j < (*path)->ways[i][0] + 1; j++)
+			printf("%d ", (*path)->ways[i][j]);
+		printf("\n");
+	}
+}
+
 int		get_length(void)
 {
 	int i;
@@ -130,15 +141,6 @@ void	init_path(t_path **path)
 
 void	modific_ways(t_path **path, int i, int j, int k)
 {
-	for (int i = 0; i < 5; i++)
-	{
-		printf("[%d] ", (*path)->ways[i][0]);
-		for (int j = 1; j < (*path)->ways[i][0] + 1; j++)
-			printf("%d ", (*path)->ways[i][j]);
-		printf("\n");
-	}
-
-
 	int u;
 
 	u = 0;
@@ -156,8 +158,6 @@ void	modific_ways(t_path **path, int i, int j, int k)
 	while (++u < (*path)->ways[(*path)->size + 1][0] + 1)
 		(*path)->ways[j][k + u - 1] = (*path)->ways[(*path)->size + 1][u + 1];
 	(*path)->ways[j][0] = u + k - 3;
-
-	printf("\n");
 }
 
 void	detect_common_edge(t_path **path)
@@ -194,7 +194,7 @@ void	add_way(t_path **path)
 
 	if ((length = get_length()) > (*path)->max_path - 1)
 		;//extend_path(path);
-	if ((*path)->size == (*path)->max_ways - 1)
+	if ((*path)->size == (*path)->max_ways - 1) // ... ? -2 swap_paths
 		;//extend_ways(path);
 
 	(*path)->ways[(*path)->size][0] = length;
@@ -208,6 +208,57 @@ void	add_way(t_path **path)
 
 	detect_common_edge(path);
 	(*path)->size++;
+}
+
+void	swap_paths(t_path **path, int a, int b)
+{
+	int i;
+	
+	i = -1;
+	while (++i < (*path)->ways[a][0] + 1)
+		(*path)->ways[(*path)->size][i] = (*path)->ways[a][i];
+	
+	i = -1;
+	while (++i < (*path)->ways[b][0] + 1)
+		(*path)->ways[a][i] = (*path)->ways[b][i];
+	
+	i = -1;
+	while (++i < (*path)->ways[(*path)->size][0] + 1)
+		(*path)->ways[b][i] = (*path)->ways[(*path)->size][i];
+}
+
+void	sort_paths(t_path **path)
+{
+	int max_path;
+	int position;
+	int i;
+	int j;
+	
+	if ((*path)->size == 1)
+		return ;
+	
+	//print_ways(path);
+	
+	i = -1;
+	while (++i < (*path)->size)
+	{
+		max_path = 0;
+		position = 0;
+		j = -1;
+		while (++j < (*path)->size - i)
+		{
+			if ((*path)->ways[j][0] > max_path)
+			{
+				max_path = (*path)->ways[j][0];
+				position = j;
+			}
+		}
+		
+		if ((*path)->ways[(*path)->size - i - 1][0] == max_path)
+			break ;
+		
+		swap_paths(path, position, (*path)->size - i - 1);
+	}
 }
 
 void	algo_suurbale(t_graph *graph)
@@ -227,23 +278,20 @@ void	algo_suurbale(t_graph *graph)
 		if (g_dest[g_end] == g_INF)
 			break ;
 
-		//print_way(graph->vector->names);
 
 		add_way(&paths);
+		//print_ways(&paths);
+		//printf("\n");
+		
+		sort_paths(&paths);
+		//print_ways(&paths);
 		remove_way(graph);
 		modific_cost(graph->vertex);
-
+		
+		//printf("------------\n");
+		
 		//print_edges(graph);
 	}
-
-
-	for (int i = 0; i < 5; i++)
-	{
-		printf("[%d] ", paths->ways[i][0]);
-		for (int j = 1; j < paths->ways[i][0] + 1; j++)
-		{
-			printf("%d ", paths->ways[i][j]);
-		}
-		printf("\n");
-	}
+	
+	//print_ways(&paths);
 }
