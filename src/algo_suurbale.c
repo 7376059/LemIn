@@ -17,7 +17,7 @@
  * if (x != 1 && x = 1)
  * 	printf("+");
  * */
-
+/*
 void	print_ways(t_path **path)
 {
 	for (int i = 0; i < 5; i++)
@@ -307,3 +307,4 @@ void	algo_suurbale(t_graph *graph)
 	
 	//print_ways(&paths);
 }
+*/

@@ -46,28 +46,71 @@ int **set_numbers(int *steps, int size)
         }
         i++;
         if (check > 1)
-        {
             if (i >= steps[check - 1])
-            {
-             //   printf("i = %d check = %d steps[check] = %d\n", i, check, steps[check] );
                 check--;
-            
-            }
-        }
-
     }
     return (rez);
 
 }
 
-void ants_output(int **ways, int **numbers, int *steps, int size)
+void ants_output(int **ways, int **numbers, int *steps, int size, char **names)
 {
     int i;
+	int j;
+	int check;
+	int k;
+	int temp;
+	int counter;
 
     i = -1;
+	check = size;
+	printf("ЖУЛИК НЕ ВОРУЙ ПОЖАЛУЙСТА\n\n");
     while (++i < steps[0])
     {
+		j = -1;
+		while (++j < check)
+		{
 
+			k = i;
+			while ()
+			
+			/*
+			k = i;
+			counter = 0;
+			while (k > -1 && counter <= ways[j][0])
+			{
+				k--;
+				counter++;
+			}
+			k++;
+			counter--;
+			//if (i == 2)
+				//printf("k = %d counter = %d\n", k , counter);
+			while (k < i)
+			{
+				//printf("L%d-%d ",  numbers[j][k], ways[j][counter + ways[j][0] - 1]);
+				printf("L%d-%d ",  numbers[j][k], ways[j][counter + 1]);
+				k++;
+				counter--;
+			}
+			
+			while(k > -1 && k > i - ways[j][0])
+			{
+				
+				temp = i + ways[j][0] - k;
+				printf("L%d-%d ",  numbers[j][k], ways[j][temp]);
+				
+				k--;
+			}
+			*/
+			
+		}
+		//exit(0);
+		printf("\n");
+        i++;
+        if (check > 1)
+            if (i >= steps[check - 1])
+                check--;
     }
 }
 
@@ -82,6 +125,9 @@ void moover(t_path *path, char **names)
     int j;
 
     i = -1; 
+	while (++i < path->step_elems)
+		printf("%d\n", path->steps[i]);
+	i = -1;
     while (++i < path->step_elems)
     {
        j = -1;
@@ -91,5 +137,5 @@ void moover(t_path *path, char **names)
        printf("\n");
     }
 
-
+	ants_output(path->ways, numbers, path->steps, path->step_elems, names);
 }

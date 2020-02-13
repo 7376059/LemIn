@@ -1,30 +1,30 @@
 #include "lemin.h"
 
-/*
 t_path *init_path(void)
 {
 	t_path *rez;
 
     rez = (t_path*)malloc(sizeof(t_path));
-    rez->size = 9;
+    rez->size = 3;
     rez->ways = (int**)malloc(sizeof(char*) * 10);
     rez->ways[0] = (int*)malloc(sizeof(int) * 3);
-    rez->ways[0][0] = 6;
+    rez->ways[0][0] = 2;
     rez->ways[0][1] = 0;
-    rez->ways[0][2] = 4;
-
+    rez->ways[0][2] = 1;
 
     rez->ways[1] = (int*)malloc(sizeof(int) * 6);
-    rez->ways[1][0] = 6;
-    rez->ways[1][1] = 0;
-    rez->ways[1][1] = 1;
-    rez->ways[1][3] = 2;
-    rez->ways[1][4] = 3;
+    rez->ways[1][0] = 3;
+    rez->ways[1][1] = 2;
+    rez->ways[1][2] = 3;
+    rez->ways[1][3] = 1;
 
     rez->ways[2] = (int*)malloc(sizeof(int) * 6);
-    rez->ways[2][0] = 6;
-
-
+    rez->ways[2][0] = 4;
+    rez->ways[2][1] = 5;
+    rez->ways[2][2] = 6;
+    rez->ways[2][3] = 7;
+    rez->ways[2][4] = 1;
+	
     rez->ways[3] = (int*)malloc(sizeof(int) * 6);
     rez->ways[3][0] = 6;
 
@@ -44,7 +44,6 @@ t_path *init_path(void)
     rez->ways[8][0] = 6;
     return (rez);
 }
-*/
 
 
 /*
