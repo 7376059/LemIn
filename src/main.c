@@ -24,10 +24,11 @@ int main(void)
 
 	algo_suurbale(gr);
 
-    //t_path *kek = init_path();
+   // t_path *kek = init_path();
     //kek = counter(kek);
    // printf("Ants %d\n Steps %d\n", g_ants, kek->final_steps);
    // printf("__________________\nFinal Steps %d", kek->final_steps);
+    //printf("ants = %d, elenms = %d\n steps = %d\n", kek->steps[0], kek->step_elems, kek->final_steps);
 
 	//moover(kek, gr->vector->names);
     return (0);

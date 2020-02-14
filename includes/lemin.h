@@ -93,6 +93,7 @@ void throw_error(t_graph *gr);
 int get_mas_length(char **mas);
 void clear_mas(char **mas);
 t_path *counter(t_path *path);
+t_path *counter2(t_path *path);
 t_path *balancer(t_path *path);
 void moover(t_path *path, char **names);
 //t_path *init_path(void);

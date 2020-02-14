@@ -125,9 +125,11 @@ void moover(t_path *path, char **names)
     int i;
     int j;
 
-    i = -1; 
+    i = -1;
+    /*
 	while (++i < path->step_elems)
 		printf("%d\n", path->steps[i]);
+        */
 	i = -1;
     while (++i < path->step_elems)
     {
@@ -138,5 +140,5 @@ void moover(t_path *path, char **names)
        printf("\n");
     }
 
-	ants_output(path->ways, numbers, path->steps, path->step_elems, names);
+	//ants_output(path->ways, numbers, path->steps, path->step_elems, names);
 }

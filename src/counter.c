@@ -1,15 +1,14 @@
 #include "lemin.h"
-
 /*
 t_path *init_path(void)
 {
 	t_path *rez;
 
     rez = (t_path*)malloc(sizeof(t_path));
-    rez->size = 3;
+    rez->size = 1;
     rez->ways = (int**)malloc(sizeof(char*) * 10);
     rez->ways[0] = (int*)malloc(sizeof(int) * 3);
-    rez->ways[0][0] = 2;
+    rez->ways[0][0] = 3;
     rez->ways[0][1] = 0;
     rez->ways[0][2] = 1;
 
@@ -46,38 +45,6 @@ t_path *init_path(void)
     return (rez);
 }
 */
-
-/*
-        60    по первому    139 
-80   s      e
-        100                 40 : 2 = 20
-                            20 + 100 - 1 = 119
-                            60 + 60 - 1 = 119
-                            
-
-        119
-         119 - 110 = 9
-        9 : 3 = 3 
-
-        3 + 110 - 1 = 112
-
-
-        60    по первому             55 + 60 - 1   114
-80   s      e
-        100                             15 + 100 - 1 = 114
- 
-        110                            5 + 100 - 1  114
-примерно 5 муравьев по пути после итерации алго на 77 еще 2 пустим по пути 11 например 
-
------------
-смотрим 4 путь дальше
- по алго 
- заебись все расписал как по маслу
-// не проебать остаток от деления на 2
- 
-    
-*/
-
 int *steps_creator(int count, int *size)
 {
     static  int *rez;
@@ -118,6 +85,18 @@ int set_koef(void)
 
 t_path *counter(t_path *path)
 {
+    if(path->size > 1)
+        return(counter2(path));
+    path->steps = (int*)malloc(sizeof(int) * 1);
+    path->steps[0] = g_ants;
+    path->step_elems = 1;
+    path->final_steps = g_ants + path->ways[0][0];
+    return (path);
+}
+
+
+t_path *counter2(t_path *path)
+{
     int ants;
     int first;
     int count;
@@ -151,5 +130,4 @@ t_path *counter(t_path *path)
     path = balancer(path);
     path->final_steps = path->steps[0] + path->ways[0][0] - 1;    // path->wats[0] - 2 bilo
     return(path);
-
 }
