@@ -17,10 +17,12 @@
  * if (x != 1 && x = 1)
  * 	printf("+");
  * */
-/*
+
 void	print_ways(t_path **path)
 {
-	for (int i = 0; i < 5; i++)
+	printf("final_steps: %d\n", (*path)->final_steps);
+	printf("size: %d\n", (*path)->size);
+	for (int i = 0; i < 7; i++)
 	{
 		printf("[%d] ", (*path)->ways[i][0]);
 		for (int j = 1; j < (*path)->ways[i][0] + 1; j++)
@@ -133,6 +135,8 @@ void	init_path(t_path **path)
 	(*path)->max_path = 100;
 	(*path)->size = 0;
 	(*path)->final_steps = 0;
+	(*path)->step_elems = 0;
+	(*path)->steps = NULL;
 	(*path)->ways = (int**)malloc(sizeof(int*) * 100);
 	i = -1;
 	while (++i < 100)
@@ -194,7 +198,7 @@ void	add_way(t_path **path)
 
 	if ((length = get_length()) > (*path)->max_path - 1)
 		;//extend_path(path);
-	if ((*path)->size == (*path)->max_ways - 1) // ... ? -2 swap_paths
+	if ((*path)->size > (*path)->max_ways - 1) // ... ? -2 swap_paths
 		;//extend_ways(path);
 
 	(*path)->ways[(*path)->size][0] = length;
@@ -261,20 +265,49 @@ void	sort_paths(t_path **path)
 	}
 }
 
+void	save_best_choice(t_path **best_choice, t_path *path)
+{
+	int i;
+	int j;
+	
+	(*best_choice)->size = path->size;
+	if ((*best_choice)->size < path->max_ways - 1)
+		;//extend_ways
+	if ((*best_choice)->max_path < path->max_path)
+		;//extend_path(best_choice, path->max_path);
+	(*best_choice)->max_ways = path->max_ways;
+	(*best_choice)->max_path = path->max_path;
+	i = -1;
+	while (++i < path->size)
+	{
+		j = -1;
+		while (++j < path->ways[i][0] + 1)
+			(*best_choice)->ways[i][j] = path->ways[i][j];
+	}
+	(*best_choice)->step_elems = path->step_elems;
+	if ((*best_choice)->steps)
+		free((*best_choice)->steps);
+	(*best_choice)->steps = (int*)malloc(sizeof(int) * path->step_elems);
+	i = -1;
+	while (++i < path->step_elems)
+		(*best_choice)->steps[i] = path->steps[i];
+	(*best_choice)->final_steps = path->final_steps;
+}
+
 void	algo_suurbale(t_graph *graph)
 {
 	t_path *paths;
 	t_path	*best_choice;
-    t_path  *temp;
 
-	print_graph(graph);
-    int i ;
-
-    i = 1;
+	//print_graph(graph);
+	
+	init_path(&best_choice);
 	init_path(&paths);
+	
 	while (1)
 	{
 		algo_dijkstra(graph);
+		
 		//if (unreachable_vertex()) ... ? 
 		//	;
 
@@ -283,28 +316,28 @@ void	algo_suurbale(t_graph *graph)
             
 		add_way(&paths);
         
-		//print_ways(&paths);
 		//printf("\n");
 		
 		sort_paths(&paths);
-        if (i == 1)
-        {
-            best_choice = counter(paths);
-            i = 0;
-        }
         
-            
-
-
-		//print_ways(&paths);
+		print_ways(&paths);
+		
+        paths = counter(paths);
+		if (best_choice->final_steps == 0 ||
+				best_choice->final_steps > paths->final_steps)
+			save_best_choice(&best_choice, paths);
+		
+			
 		remove_way(graph);
 		modific_cost(graph->vertex);
 		
-		//printf("------------\n");
+		printf("\n");
+		print_ways(&best_choice);
+		printf("-------------------------\n");
+		
 		
 		//print_edges(graph);
 	}
 	
 	//print_ways(&paths);
 }
-*/
