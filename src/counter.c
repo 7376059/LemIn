@@ -1,5 +1,6 @@
 #include "lemin.h"
 
+/*
 t_path *init_path(void)
 {
 	t_path *rez;
@@ -44,7 +45,7 @@ t_path *init_path(void)
     rez->ways[8][0] = 6;
     return (rez);
 }
-
+*/
 
 /*
         60    по первому    139 
@@ -115,7 +116,6 @@ int set_koef(void)
 
 }
 
-
 t_path *counter(t_path *path)
 {
     int ants;
@@ -153,4 +153,3 @@ t_path *counter(t_path *path)
     return(path);
 
 }
-

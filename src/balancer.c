@@ -66,6 +66,7 @@ t_path *balancer(t_path *path)
     i = -1;
     sum = 0;
     rez = ways_steps(path);
+    /*
     printf("Ants = %d\n", g_ants);
     while(++i < path->step_elems)
     {
@@ -75,12 +76,14 @@ t_path *balancer(t_path *path)
         printf("%d\n", rez[i]);
     }
     printf("ants checksum = %d\n", sum);
+    */
     path->steps = min_gap(path->steps, rez, path->step_elems);
     
     printf("----------------------\n");
     i = -1;
     sum = 0;
     rez = ways_steps(path);
+    /*
     while(++i < path->step_elems)
     {
 
@@ -90,6 +93,6 @@ t_path *balancer(t_path *path)
         printf("%d\n", rez[i]);
     }
     printf("ants checksum = %d\n", sum);
-    
+    */
     return (path);
 }

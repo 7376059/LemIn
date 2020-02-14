@@ -62,28 +62,29 @@ void ants_output(int **ways, int **numbers, int *steps, int size, char **names)
 	int temp;
 	int counter;
 
-    i = -1;
+    i = 0;
 	check = size;
 	printf("ЖУЛИК НЕ ВОРУЙ ПОЖАЛУЙСТА\n\n");
-    while (++i < steps[0])
+    while (i < steps[0])
     {
 		j = -1;
+        //printf("i = %d|\n", i);
 		while (++j < check)
 		{
-
-			k = i;
-			while ()
-			
-			/*
 			k = i;
 			counter = 0;
 			while (k > -1 && counter <= ways[j][0])
 			{
+                //printf("here\n");
 				k--;
 				counter++;
 			}
-			k++;
-			counter--;
+            if (k == -1)
+            {
+			    k++;
+		        counter--;
+            }
+            //printf("counter = %d\n", counter);
 			//if (i == 2)
 				//printf("k = %d counter = %d\n", k , counter);
 			while (k < i)
@@ -93,7 +94,7 @@ void ants_output(int **ways, int **numbers, int *steps, int size, char **names)
 				k++;
 				counter--;
 			}
-			
+		/*	
 			while(k > -1 && k > i - ways[j][0])
 			{
 				
