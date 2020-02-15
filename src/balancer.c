@@ -82,7 +82,6 @@ t_path *balancer(t_path *path)
     i = -1;
     sum = 0;
     rez = ways_steps(path);
-    /*
     while(++i < path->step_elems)
     {
 
@@ -91,7 +90,6 @@ t_path *balancer(t_path *path)
         printf("%d \t", path->ways[i][0]);
         printf("%d\n", rez[i]);
     }
-    printf("ants checksum = %d\n", sum);
-    */
+    printf("ants checksum = %d\n\n", sum);
     return (path);
 }

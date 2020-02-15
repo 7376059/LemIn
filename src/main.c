@@ -24,7 +24,7 @@ int main(void)
 
 	algo_suurbale(gr);
 
-   // t_path *kek = init_path();
+    //t_path *kek = init_path();
     //kek = counter(kek);
    // printf("Ants %d\n Steps %d\n", g_ants, kek->final_steps);
    // printf("__________________\nFinal Steps %d", kek->final_steps);

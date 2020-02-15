@@ -18,7 +18,7 @@
  * 	printf("+");
  * */
 
-void	print_ways(t_path **path)
+void	print_ways(t_path **path, char **names)
 {
 	printf("final_steps: %d\n", (*path)->final_steps);
 	printf("size: %d\n", (*path)->size);
@@ -26,7 +26,7 @@ void	print_ways(t_path **path)
 	{
 		printf("[%d] ", (*path)->ways[i][0]);
 		for (int j = 1; j < (*path)->ways[i][0] + 1; j++)
-			printf("%d ", (*path)->ways[i][j]);
+			printf("%s ", names[(*path)->ways[i][j]]);
 		printf("\n");
 	}
 }
@@ -375,7 +375,7 @@ void	algo_suurbale(t_graph *graph)
 		
 		t_path *path;
 		path = paths;
-		
+		/*
 		if (paths->size == 3)
 		{
 			printf("FUCK\n");
@@ -398,10 +398,10 @@ void	algo_suurbale(t_graph *graph)
 			printf("\n");
 			printf("final_steps:	%d\n", path->final_steps);
 			printf("END SUKA\n\n");
-		}
+		}*/
        
 		paths = counter(paths);
-		
+	/*	
 		if (paths->size == 3)
 		{
 			printf("FUCK\n");
@@ -425,13 +425,14 @@ void	algo_suurbale(t_graph *graph)
 			printf("final_steps:	%d\n", path->final_steps);
 			printf("END SUKA\n\n");
 		}
-		
+	*/	
 		// todonot: локальные переменные следует объявлять по мере необходимости а не все сразу (спелчекер говно)
-		i = -1;
+		/*
+        i = -1;
 		while (++i < paths->step_elems)
 			printf("%d [%d]\n", i,  paths->steps[i]);
-		
-		print_ways(&paths);
+		*/
+		//print_ways(&paths);
 		
 		if (best_choice->final_steps == 0 ||
 				best_choice->final_steps > paths->final_steps)
@@ -440,8 +441,9 @@ void	algo_suurbale(t_graph *graph)
 		remove_way(graph);
 		modific_cost(graph->vertex);
 		
-		printf("\n");
-		print_ways(&best_choice);
-		printf("-------------------------\n");
+		//printf("\n");
+		//print_ways(&best_choice);
+		//printf("-------------------------\n");
 	}
+	print_ways(&best_choice, graph->vector->names);
 }

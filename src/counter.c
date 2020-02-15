@@ -5,7 +5,7 @@ t_path *init_path(void)
 	t_path *rez;
 
     rez = (t_path*)malloc(sizeof(t_path));
-    rez->size = 1;
+    rez->size = 3;
     rez->ways = (int**)malloc(sizeof(char*) * 10);
     rez->ways[0] = (int*)malloc(sizeof(int) * 3);
     rez->ways[0][0] = 3;
@@ -45,12 +45,20 @@ t_path *init_path(void)
     return (rez);
 }
 */
-int *steps_creator(int count, int *size)
+int *steps_creator(int count, int *size, int flag)
 {
     static  int *rez;
     int         i;
     
-    if(rez == NULL)
+    //int flag = 0;
+
+    if(flag == 1)
+    {
+        //free(rez);
+        rez = NULL;
+
+    }
+    if (rez == NULL && flag == 0)
     {
         rez = (int*)malloc(sizeof(int) * count);
         *size = count;
@@ -58,9 +66,12 @@ int *steps_creator(int count, int *size)
         while (++i < count)
             rez[i] = 0;
     }
-    i = -1;
-    while (++i < count)
-        rez[i]++;
+    if (flag == 0)
+    {    
+        i = -1;
+        while (++i < count)
+            rez[i]++;
+    }
     return(rez);
 }
 
@@ -125,9 +136,12 @@ t_path *counter2(t_path *path)
         }
         ants -= count;
         rez++;
-        path->steps = steps_creator(count, &path->step_elems);
+        path->steps = steps_creator(count, &path->step_elems, 0);
     }
     path = balancer(path);
+
     path->final_steps = path->steps[0] + path->ways[0][0] - 1;    // path->wats[0] - 2 bilo
+    //printf("%d\n", path->final_steps);
+    steps_creator(0, 0, 1);
     return(path);
 }

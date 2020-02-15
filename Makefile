@@ -22,7 +22,7 @@ SRC = $(addprefix $(SRC_PATH), $(SRC_NAME))
 all :$(NAME)
 
 $(NAME):
-	@make re -C ./libft
+	#@make re -C ./libft
 	@gcc $(FLAGS) -I includes/ -c $(SRC)
 	@gcc $(FLAGS) -I includes/ $(OBJ) -o $(NAME) ./libft/libft.a
 
@@ -31,7 +31,7 @@ clean:
 	@rm -f $(OBJ)
 
 fclean: clean
-	@make fclean -C ./libft
+	##@make fclean -C ./libft
 	@rm -f $(NAME)
 
 re: fclean all
