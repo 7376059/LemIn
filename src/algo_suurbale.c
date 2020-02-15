@@ -83,7 +83,9 @@ void	remove_way(t_graph *graph)
 	int			j;
 	int 		k;
 
+	// todo: придумать индексам говорящие имена (для vertex то же)
 	i = g_end;
+	// todo: здесь, вынести -1 в глобальную константу и назвать её (признак отсутствия вершины)
 	while (i != -1)
 	{
 		vertex = graph->vertex;
@@ -126,21 +128,23 @@ void	modific_cost(t_vertex *vertex)
 	}
 }
 
-void	init_path(t_path **path)
+void	init_path(t_path **paths) // todo 100 -> max_ways
 {
-	int i;
+	t_path	*path;
+	int		i;
 
-	*path = (t_path*)malloc(sizeof(t_path));
-	(*path)->max_ways = 100;
-	(*path)->max_path = 100;
-	(*path)->size = 0;
-	(*path)->final_steps = 0;
-	(*path)->step_elems = 0;
-	(*path)->steps = NULL;
-	(*path)->ways = (int**)malloc(sizeof(int*) * 100);
+	*paths = (t_path*)malloc(sizeof(t_path));
+	path = (*paths);
+	path->max_ways = 100;
+	path->max_path = 100;
+	path->size = 0;
+	path->final_steps = 0;
+	path->step_elems = 0;
+	path->steps = NULL;
+	path->ways = (int**)malloc(sizeof(int*) * 100);
 	i = -1;
 	while (++i < 100)
-		(*path)->ways[i] = (int*)malloc(sizeof(int) * 100);
+		path->ways[i] = (int*)malloc(sizeof(int) * 100);
 }
 
 void	modific_ways(t_path **path, int i, int j, int k)
@@ -191,15 +195,63 @@ void	detect_common_edge(t_path **path)
 	}
 }
 
+void	extend_path(t_path **path, int new_size) // мб утечки
+{ 
+	int **extended_ways;
+	int	i;
+	int j;
+	
+	printf("HERE\n");
+	
+	extended_ways = (int**)malloc(sizeof(int*) * (*path)->max_ways);
+	i = -1;
+	while (++i < new_size)
+		extended_ways[i] = (int*)malloc(sizeof(int) * new_size);
+	i = -1;
+	while (++i < (*path)->size)
+	{
+		j = -1;
+		while (++j < (*path)->ways[i][0] + 1)
+			extended_ways[i][j] = (*path)->ways[i][j];
+		free((*path)->ways[i]);
+	}
+	free((*path)->ways);
+	(*path)->ways = extended_ways;
+}
+
+void	extend_ways(t_path **path, int new_size)
+{
+	int **extended_ways;
+	int	i;
+	int j;
+	
+	printf("HERE\n");
+	
+	extended_ways = (int**)malloc(sizeof(int*) * new_size);
+	i = -1;
+	while (++i < (*path)->size)
+		extended_ways[i] = (int*)malloc(sizeof(int) * (*path)->max_path);
+	i = -1;
+	while (++i < (*path)->size)
+	{
+		j = -1;
+		while (++j < (*path)->ways[i][0] + 1)
+			extended_ways[i][j] = (*path)->ways[i][j];
+		free((*path)->ways[i]);
+	}
+	free((*path)->ways);
+	(*path)->ways = extended_ways;
+}
+
 void	add_way(t_path **path)
 {
 	int length;
 	int i;
 
 	if ((length = get_length()) > (*path)->max_path - 1)
-		;//extend_path(path);
+		;//extend_path(path, 2 * (*path)->max_path);
 	if ((*path)->size > (*path)->max_ways - 1) // ... ? -2 swap_paths
-		;//extend_ways(path);
+		;//extend_ways(path, 2 * (*path)->max_ways);
 
 	(*path)->ways[(*path)->size][0] = length;
 	i = g_end;
@@ -271,8 +323,8 @@ void	save_best_choice(t_path **best_choice, t_path *path)
 	int j;
 	
 	(*best_choice)->size = path->size;
-	if ((*best_choice)->size < path->max_ways - 1)
-		;//extend_ways
+	if ((*best_choice)->size < path->max_ways) // -1
+		;//extend_ways(best_choice, path->max_ways);
 	if ((*best_choice)->max_path < path->max_path)
 		;//extend_path(best_choice, path->max_path);
 	(*best_choice)->max_ways = path->max_ways;
@@ -296,6 +348,8 @@ void	save_best_choice(t_path **best_choice, t_path *path)
 
 void	algo_suurbale(t_graph *graph)
 {
+	int i = -1;
+	
 	t_path *paths;
 	t_path	*best_choice;
 
@@ -304,6 +358,7 @@ void	algo_suurbale(t_graph *graph)
 	init_path(&best_choice);
 	init_path(&paths);
 	
+	// todo: избавиться от брейка в теле цикла, цикл должен выходить по условию в (..)
 	while (1)
 	{
 		algo_dijkstra(graph);
@@ -311,22 +366,76 @@ void	algo_suurbale(t_graph *graph)
 		//if (unreachable_vertex()) ... ? 
 		//	;
 
+		// todo: сделать глобальную переменную (эту и другие) константой или сделать её неглобальной (локальной)
 		if (g_dest[g_end] == g_INF)
 			break ;
             
 		add_way(&paths);
-        
-		//printf("\n");
-		
 		sort_paths(&paths);
-        
+		
+		t_path *path;
+		path = paths;
+		
+		if (paths->size == 3)
+		{
+			printf("FUCK\n");
+			printf("size:		%d\n", path->size);
+			printf("max_ways:	%d\n", path->max_ways);
+			printf("max_path:	%d\n", path->max_path);
+			printf("ways:\n");
+			for (int i = 0; i < path->size; i++)
+			{
+				printf("[%d]", path->ways[i][0]);
+				for (int j = 1; j < path->ways[i][0] + 1; j++)
+					printf(" %d", path->ways[i][j]);
+				printf("\n");
+			}
+			printf("\n");
+			printf("step_elems:	%d\n", path->step_elems);
+			printf("steps: ");
+			for (int i = 0; i < path->step_elems; i++)
+				printf("%d ", path->steps[i]);
+			printf("\n");
+			printf("final_steps:	%d\n", path->final_steps);
+			printf("END SUKA\n\n");
+		}
+       
+		paths = counter(paths);
+		
+		if (paths->size == 3)
+		{
+			printf("FUCK\n");
+			printf("size:		%d\n", path->size);
+			printf("max_ways:	%d\n", path->max_ways);
+			printf("max_path:	%d\n", path->max_path);
+			printf("ways:\n");
+			for (int i = 0; i < path->size; i++)
+			{
+				printf("[%d]", path->ways[i][0]);
+				for (int j = 1; j < path->ways[i][0] + 1; j++)
+					printf(" %d", path->ways[i][j]);
+				printf("\n");
+			}
+			printf("\n");
+			printf("step_elems:	%d\n", path->step_elems);
+			printf("steps: ");
+			for (int i = 0; i < path->step_elems; i++)
+				printf("%d ", path->steps[i]);
+			printf("\n");
+			printf("final_steps:	%d\n", path->final_steps);
+			printf("END SUKA\n\n");
+		}
+		
+		// todonot: локальные переменные следует объявлять по мере необходимости а не все сразу (спелчекер говно)
+		i = -1;
+		while (++i < paths->step_elems)
+			printf("%d [%d]\n", i,  paths->steps[i]);
+		
 		print_ways(&paths);
 		
-        paths = counter(paths);
 		if (best_choice->final_steps == 0 ||
 				best_choice->final_steps > paths->final_steps)
 			save_best_choice(&best_choice, paths);
-		
 			
 		remove_way(graph);
 		modific_cost(graph->vertex);
@@ -334,10 +443,5 @@ void	algo_suurbale(t_graph *graph)
 		printf("\n");
 		print_ways(&best_choice);
 		printf("-------------------------\n");
-		
-		
-		//print_edges(graph);
 	}
-	
-	//print_ways(&paths);
 }
