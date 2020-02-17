@@ -6,7 +6,7 @@
 /*   By: efriesen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/06 18:21:05 by efriesen          #+#    #+#             */
-/*   Updated: 2020/02/12 19:49:50 by efriesen         ###   ########.fr       */
+/*   Updated: 2020/02/17 17:15:32 by efriesen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,38 +17,6 @@
  * if (x != 1 && x = 1)
  * 	printf("+");
  * */
-
-void	print_ways(t_path **path, char **names)
-{
-	//printf("final_steps: %d\n", (*path)->final_steps);
-	//printf("size: %d\n", (*path)->size);
-	for (int i = 0; i < (*path)->size; i++)
-	{
-		printf("[%d] ", (*path)->ways[i][0]);
-		for (int j = 1; j < (*path)->ways[i][0] + 1; j++)
-			printf("%s ", names[(*path)->ways[i][j]]);
-		printf("\n");
-	}
-	printf("\n");
-	for (int i = 0; i < (*path)->step_elems; i++)
-		printf("%d ", (*path)->steps[i]);
-	printf("\n\n");
-}
-
-int		get_length(void)
-{
-	int i;
-	int	j;
-
-	i = -1;
-	j = g_end;
-	while (j != -1)
-	{
-		i++;
-		j = g_parent[j];
-	}
-	return (i);
-}
 
 void	remove_list_elem(t_edge **begin, t_edge *remove)
 {
@@ -118,7 +86,6 @@ void	modific_cost(t_vertex *vertex)
 {
 	t_edge *edges;
 	
-	//printf("in\n");
 	while (vertex)
 	{
 		edges = vertex->edges;
@@ -130,285 +97,6 @@ void	modific_cost(t_vertex *vertex)
 		}
 		vertex = vertex->next;
 	}
-	
-	//printf("out\n");
-}
-
-void	init_path(t_path **paths) // todo 100 -> max_ways
-{
-	t_path	*path;
-	int		i;
-
-	*paths = (t_path*)malloc(sizeof(t_path));
-	path = (*paths);
-	path->max_ways = 100;
-	path->max_path = 100;
-	path->size = 0;
-	path->final_steps = 0;
-	path->step_elems = 0;
-	path->steps = NULL;
-	path->ways = (int**)malloc(sizeof(int*) * path->max_ways);
-	i = -1;
-	while (++i < path->max_ways)
-		path->ways[i] = (int*)malloc(sizeof(int) * path->max_path);
-}
-
-void	modific_ways(t_path **path, int i, int j, int k)
-{
-	int u;
-
-	u = 0;
-	while (i + ++u < (*path)->ways[(*path)->size][0] + 1)
-		(*path)->ways[(*path)->size + 1][u]
-			= (*path)->ways[(*path)->size][i + u];
-	(*path)->ways[(*path)->size + 1][0] = u - 1;
-
-	u = -1;
-	while (k + ++u < (*path)->ways[j][0] + 1)
-		(*path)->ways[(*path)->size][i + u] = (*path)->ways[j][k + u];
-	(*path)->ways[(*path)->size][0] = i + u - 1;	
-
-	u = -1;
-	while (++u < (*path)->ways[(*path)->size + 1][0] + 1)
-		(*path)->ways[j][k + u - 1] = (*path)->ways[(*path)->size + 1][u + 1];
-	(*path)->ways[j][0] = u + k - 3;
-}
-
-void	detect_common_edge(t_path **path)
-{
-	int i;
-	int	j;
-	int	k;
-
-	i = 0;
-	while (++i < (*path)->ways[(*path)->size][0] - 1)
-	{
-		j = -1;
-		while (++j < (*path)->size)
-		{
-			k = 1;
-			while (++k < (*path)->ways[j][0])
-			{
-				if (((*path)->ways[(*path)->size][i] == (*path)->ways[j][k])
-						&& ((*path)->ways[(*path)->size][i + 1]
-							== (*path)->ways[j][k - 1]))
-				{
-					modific_ways(path, i + 1, j, k + 1);
-					// break ;
-				}
-			}
-		}
-	}
-}
-
-void	extend_path(t_path **path, int new_size) // мб утечки
-{ 
-	int **extended_ways;
-	int	i;
-	int j;
-	
-	//printf("PATH new_size %d\n", new_size);
-	
-	extended_ways = (int**)malloc(sizeof(int*) * (*path)->max_ways);
-	i = -1;
-	while (++i < new_size)
-		extended_ways[i] = (int*)malloc(sizeof(int) * new_size);
-	i = -1;
-	while (++i < (*path)->size)
-	{
-		j = -1;
-		while (++j < (*path)->ways[i][0] + 1)
-			extended_ways[i][j] = (*path)->ways[i][j];
-		//free((*path)->ways[i]);
-	}
-	//free((*path)->ways);
-	(*path)->ways = extended_ways;
-	(*path)->max_path = new_size;
-}
-
-void	extend_ways(t_path **path, int new_size)
-{
-	int **extended_ways;
-	int	i;
-	int j;
-	
-	//printf("WAYS new_size %d\n", new_size);
-	
-	extended_ways = (int**)malloc(sizeof(int*) * new_size);
-	i = -1;
-	while (++i < new_size)
-		extended_ways[i] = (int*)malloc(sizeof(int) * (*path)->max_path);
-	i = -1;
-	while (++i < (*path)->size)
-	{
-		j = -1;
-		while (++j < (*path)->ways[i][0] + 1)
-			extended_ways[i][j] = (*path)->ways[i][j];
-		//free((*path)->ways[i]);
-	}
-	//free((*path)->ways);
-	(*path)->ways = extended_ways;
-	(*path)->max_ways = new_size;
-}
-
-void	add_way(t_path **path)
-{
-	int length;
-	int i;
-
-	if ((length = get_length()) > (*path)->max_path - 1)
-		extend_path(path, 2 * (*path)->max_path);
-	if ((*path)->size > (*path)->max_ways - 1) // ... ? -2 swap_paths
-		extend_ways(path, 2 * (*path)->max_ways);
-
-	(*path)->ways[(*path)->size][0] = length;
-	i = g_end;
-
-	while (length != 0)
-	{	
-		(*path)->ways[(*path)->size][length--] = i;
-		i = g_parent[i];
-	}
-
-	detect_common_edge(path);
-	(*path)->size++;
-}
-
-void	swap_paths(t_path **path, int a, int b)
-{
-	int i;
-	
-	i = -1;
-	while (++i < (*path)->ways[a][0] + 1)
-		(*path)->ways[(*path)->size][i] = (*path)->ways[a][i];
-	
-	i = -1;
-	while (++i < (*path)->ways[b][0] + 1)
-		(*path)->ways[a][i] = (*path)->ways[b][i];
-	
-	i = -1;
-	while (++i < (*path)->ways[(*path)->size][0] + 1)
-		(*path)->ways[b][i] = (*path)->ways[(*path)->size][i];
-}
-
-void	sort_paths(t_path **path)
-{
-	int max_path;
-	int position;
-	int i;
-	int j;
-	
-	if ((*path)->size == 1)
-		return ;
-	
-	//print_ways(path);
-	
-	i = -1;
-	while (++i < (*path)->size)
-	{
-		max_path = 0;
-		position = 0;
-		j = -1;
-		while (++j < (*path)->size - i)
-		{
-			if ((*path)->ways[j][0] > max_path)
-			{
-				max_path = (*path)->ways[j][0];
-				position = j;
-			}
-		}
-		
-		if ((*path)->ways[(*path)->size - i - 1][0] == max_path)
-			break ;
-		
-		swap_paths(path, position, (*path)->size - i - 1);
-	}
-}
-
-void	save_best_choice(t_path **best_choice, t_path *path)
-{
-	int i;
-	int j;
-	
-	(*best_choice)->size = path->size;
-	if ((*best_choice)->max_ways < path->max_ways) // -1
-	{
-		//printf("\nsave ways in\n");
-		extend_ways(best_choice, path->max_ways);
-		//printf("out\n\n");
-	}
-	if ((*best_choice)->max_path < path->max_path)
-	{
-		//printf("\nsave path in\n");
-		extend_path(best_choice, path->max_path);
-		//printf("out\n\n");
-	}
-	(*best_choice)->max_ways = path->max_ways;
-	(*best_choice)->max_path = path->max_path;
-	i = -1;
-	while (++i < path->size)
-	{
-		j = -1;
-		while (++j < path->ways[i][0] + 1)
-			(*best_choice)->ways[i][j] = path->ways[i][j];
-	}
-	(*best_choice)->step_elems = path->step_elems;
-	if ((*best_choice)->steps)
-		free((*best_choice)->steps);
-	(*best_choice)->steps = (int*)malloc(sizeof(int) * path->step_elems);
-	i = -1;
-	while (++i < path->step_elems)
-		(*best_choice)->steps[i] = path->steps[i];
-	(*best_choice)->final_steps = path->final_steps;
-}
-
-int		**create_array_of_ants(int **ways, int size_ways, int *steps, int size_steps)
-{
-	int **ants;
-	int	i;
-	int j;
-	int k;
-	
-	ants = (int**)malloc(sizeof(int*) * size_ways);
-	i = -1;
-	while (++i < size_ways)
-	{
-		ants[i] = (int*)malloc(sizeof(int) * steps[i]);
-		j = i + 1;
-		k = -1;
-		while (++k < steps[i])
-		{
-			ants[i][k] = j;
-			j += 3;
-		}
-	}
-	return (ants);
-}
-
-void	moover(t_path *paths, char **names)
-{
-	int **ants;
-	int	current_step;
-	int i;
-	int	j;
-	
-	ants = create_array_of_ants(paths->ways, paths->size, paths->steps, paths->step_elems);
-	
-	current_step = 0;
-	while (++current_step <= paths->final_steps)
-	{
-		i = -1;
-		while (++i < current_step)
-		{
-			j = -1;
-			while (++j < paths->size && i < paths->steps[j])
-			{
-				if (current_step - i <= paths->ways[j][0])
-					printf("L%d-%s ", ants[j][i], names[paths->ways[j][current_step - i]]);
-			}
-		}
-		printf("\n");
-	}
 }
 
 void	algo_suurbale(t_graph *graph)
@@ -418,12 +106,9 @@ void	algo_suurbale(t_graph *graph)
 	t_path	*paths;
 	t_path	*best_choice;
 
-	//print_graph(graph);
-	
 	init_path(&best_choice);
 	init_path(&paths);
 	
-	// todo: избавиться от брейка в теле цикла, цикл должен выходить по условию в (..)
 	while (1)
 	{
 		algo_dijkstra(graph);
@@ -431,7 +116,6 @@ void	algo_suurbale(t_graph *graph)
 		//if (unreachable_vertex()) ... ? 
 		//	;
 
-		// todo: сделать глобальную переменную (эту и другие) константой или сделать её неглобальной (локальной)
 		if (g_dest[g_end] == g_INF)
 			break ;
             
@@ -441,77 +125,14 @@ void	algo_suurbale(t_graph *graph)
 		t_path *path;
 		path = paths;
 		
-		/*if (paths->size == 3)
-		{
-	
-			printf("FUCK\n");
-			printf("size:		%d\n", path->size);
-			printf("max_ways:	%d\n", path->max_ways);
-			printf("max_path:	%d\n", path->max_path);
-			printf("ways:\n");
-			for (int i = 0; i < path->size; i++)
-			{
-				printf("[%d]", path->ways[i][0]);
-				for (int j = 1; j < path->ways[i][0] + 1; j++)
-					printf(" %d", path->ways[i][j]);
-				printf("\n");
-			}
-			printf("\n");
-			printf("step_elems:	%d\n", path->step_elems);
-			printf("steps: ");
-			for (int i = 0; i < path->step_elems; i++)
-				printf("%d ", path->steps[i]);
-			printf("\n");
-			printf("final_steps:	%d\n", path->final_steps);
-			printf("END SUKA\n\n");
-		}*/
-		
 		paths = counter(paths);
-		
-		/*if (paths->size == 3)
-		{
-			printf("FUCK\n");
-			printf("size:		%d\n", path->size);
-			printf("max_ways:	%d\n", path->max_ways);
-			printf("max_path:	%d\n", path->max_path);
-			printf("ways:\n");
-			for (int i = 0; i < path->size; i++)
-			{
-				printf("[%d]", path->ways[i][0]);
-				for (int j = 1; j < path->ways[i][0] + 1; j++)
-					printf(" %d", path->ways[i][j]);
-				printf("\n");
-			}
-			printf("\n");
-			printf("step_elems:	%d\n", path->step_elems);
-			printf("steps: ");
-			for (int i = 0; i < path->step_elems; i++)
-				printf("%d ", path->steps[i]);
-			printf("\n");
-			printf("final_steps:	%d\n", path->final_steps);
-			printf("END SUKA\n\n");
-		}*/
-		
-		// todonot: локальные переменные следует объявлять по мере необходимости а не все сразу (спелчекер говно)
-		/*i = -1;
-		while (++i < paths->step_elems)
-			printf("%d [%d]\n", i,  paths->steps[i]);
-		*/
-
-		//print_ways(&paths);	
 		
 		if (best_choice->final_steps == 0 ||
 				best_choice->final_steps > paths->final_steps)
-			save_best_choice(&best_choice, paths);
-		
+			save_best_choice(&best_choice, paths);			
 		
 		remove_way(graph);
 		modific_cost(graph->vertex);
-		
-		//print_ways(&best_choice);
-	
-		//printf("-------------------------\n");
 	}
-	print_ways(&best_choice, graph->vector->names);
-	moover(best_choice, graph->vector->names);
+	ants_mover(best_choice, graph->vector->names);
 }
