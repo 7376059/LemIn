@@ -6,11 +6,11 @@
 /*   By: dgrady <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/18 19:18:10 by dgrady            #+#    #+#             */
-/*   Updated: 2020/02/17 17:16:17 by efriesen         ###   ########.fr       */
+/*   Updated: 2020/02/22 19:27:24 by efriesen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../libft/libft.h"
+# include "../library/includes/libft.h"
 # include <fcntl.h>
 # include <stdio.h>
 
