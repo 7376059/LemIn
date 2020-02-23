@@ -6,7 +6,7 @@
 /*   By: efriesen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/06 18:21:05 by efriesen          #+#    #+#             */
-/*   Updated: 2020/02/22 19:25:53 by efriesen         ###   ########.fr       */
+/*   Updated: 2020/02/23 17:44:16 by dgrady           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,5 +136,10 @@ void	algo_suurbale(t_graph *graph)
 		remove_way(graph);
 		modific_cost(graph->vertex);
 	}
+	i	= -1;
+	printf ("ants %d\n", g_ants);
+	printf ("steps %d\n", best_choice->step_elems);
+	while (++i < best_choice->step_elems)
+		printf("%d\n", best_choice->steps[i]);
 	ants_mover(best_choice, graph->vector->names);
 }

@@ -6,7 +6,7 @@
 #    By: efriesen <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/02/22 16:49:55 by efriesen          #+#    #+#              #
-#    Updated: 2020/02/22 20:13:57 by efriesen         ###   ########.fr        #
+#    Updated: 2020/02/23 18:07:03 by dgrady           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,6 +24,7 @@ _SRC =	algo_suurbale.c\
 		main.c\
 		parser.c\
 		stuff.c\
+		stuff2.c\
 		vector.c
 
 SDIR = sources

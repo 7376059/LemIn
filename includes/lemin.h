@@ -6,7 +6,7 @@
 /*   By: dgrady <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/18 19:18:10 by dgrady            #+#    #+#             */
-/*   Updated: 2020/02/22 19:27:24 by efriesen         ###   ########.fr       */
+/*   Updated: 2020/02/23 18:09:29 by dgrady           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ t_vertex *init_vertex(int number);
 
 
 t_graph *start_parser(t_graph *gr);
-t_graph *init_graph();
+t_graph *init_graph(void);
 void print_edges(t_graph *gr);
 void print_names(t_graph *gr);
 
@@ -100,3 +100,8 @@ void clear_mas(char **mas);
 t_path *counter(t_path *path);
 t_path *counter2(t_path *path);
 t_path *balancer(t_path *path);
+int		get_number(t_graph *gr, char *name);
+int		get_ants(char *line, t_graph *gr);
+int		validate_name(char **name);
+void	clear_graph(t_graph *gr);
+void    clear_mas(char **mas);
