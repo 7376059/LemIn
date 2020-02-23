@@ -1,5 +1,4 @@
-# include "lemin.h"
-
+#include "lemin.h"
 void    print_way(char **names)
 {
 	int ver;
@@ -13,6 +12,53 @@ void    print_way(char **names)
 			printf(" --- ");
 	}
 	printf("\n");
+}
+
+
+void clear_edge(t_edge *edge)
+{
+	t_edge *fast;
+	t_edge *slow;
+
+	if(!(edge))
+	       return;
+	fast = edge->next;
+	slow = edge;
+	while(fast)
+	{
+		free(slow);
+		slow = fast;
+		fast = fast->next;
+	}
+	free(slow);
+}
+
+void clear_graph(t_graph *gr)
+{
+	int i;
+	t_vertex *fast;
+	t_vertex *slow;
+		
+	i = -1;
+	if(!(gr) || !(gr->vertex))
+		return;
+	while(++i < gr->vector->elems)
+		free(gr->vector->names[i]);
+	free(gr->vector->names);
+	free(gr->vector);
+	fast = gr->vertex->next;
+	slow = gr->vertex;
+	while(fast)
+	{
+		clear_edge(slow->edges);
+		free(slow);
+		slow = fast;
+		fast = fast->next;
+	}
+	
+		clear_edge(slow->edges);
+		free(slow);
+		free(gr);
 }
 
 void    print_graph(t_graph *gr)
@@ -92,14 +138,7 @@ int get_mas_length(char **mas)
 
 void throw_error(t_graph *gr)
 {
-	// чистим структуруi
-
-	int i;
-	i = -1;
-	while (++i < gr->vector->elems)
-	{
-		printf("%d  %s\n", i, gr->vector->names[i]);
-	}
 	write(1, "Error\n", 6);
+	clear_graph(gr);
 	exit(0);
 }

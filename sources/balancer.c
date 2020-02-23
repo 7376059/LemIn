@@ -1,6 +1,5 @@
 #include "lemin.h"
 
-
 int *ways_steps(t_path  *path)
 {
     int *rez;
@@ -56,40 +55,11 @@ int  *min_gap(int *mas, int *rez, int size)
 
 t_path *balancer(t_path *path)
 {
-    int i;
-    int min;
-    int max;
     int *rez;
-    int sum;
 
-
-    i = -1;
-    sum = 0;
     rez = ways_steps(path);
-    /*
-    printf("Ants = %d\n", g_ants);
-    while(++i < path->step_elems)
-    {
-        sum += path->steps[i];
-        printf("%d \t", path->steps[i]);
-        printf("%d \t", path->ways[i][0]);
-        printf("%d\n", rez[i]);
-    }
-    printf("ants checksum = %d\n", sum);
-    */
     path->steps = min_gap(path->steps, rez, path->step_elems);
-    //printf("---------------------\n"); 
-    i = -1;
-    sum = 0;
+	free(rez);
     rez = ways_steps(path);
-    /*while(++i < path->step_elems)
-    {
-
-        sum += path->steps[i];
-        printf("%d \t", path->steps[i]);
-        printf("%d \t", path->ways[i][0]);
-        printf("%d\n", rez[i]);
-    }
-    printf("ants checksum = %d\n\n", sum);
-    */return (path);
+    return (path);
 }

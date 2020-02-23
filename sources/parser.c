@@ -10,15 +10,13 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "lemin.h"
+#include "lemin.h"
 
 int validate_name(char **name)
 {
 	int i;
 
 	i = -1;
-    //printf("--------\n1 - %s\n", name[0]);
-    //printf("2 - %s\n", name[1]);
 	if (name[0][0] == 'L')
 		return (0);
 	while(name[1][++i])
@@ -37,11 +35,7 @@ t_graph *get_name(t_graph *gr, char **line)
 
 	i++;
 	if (!(validate_name(line)))
-    {
-        printf("get name\n");
-        
 		throw_error(gr);
-    }
 	if(gr->vertex == NULL)
 		gr->vertex = init_vertex(i);
 	else
@@ -78,8 +72,6 @@ int validate_edge(t_graph *gr, char **name)
 			flag++;
 	if (flag == 2)
 		return (1);
-	//printf("flag = %d\n", flag);
-	//printf ("%s   %s\n", name[0], name[1]);
 	return (0);
 }
 
@@ -92,18 +84,11 @@ t_graph *get_edge(t_graph *gr, char **line)
 	int j;
 
 	t_vertex *temp;
-	
 	temp = gr->vertex;
 	if (!validate_edge(gr, line))
-    {
-        printf("get edge\n");
 		throw_error(gr);
-    }
 	if (g_start == -1 || g_end == -1)
-    {
-        printf("start end\n");
 		throw_error(gr);
-    }
 	first = get_number(gr, line[0]);
 	second = get_number(gr, line[1]);
 	i = 0;
@@ -128,10 +113,9 @@ t_graph *start_parser(t_graph *gr)
 	char a;
 
 	get_next_line(0, &line);
-	g_ants = ft_atoi(line);
-
+	g_ants = ft_atoi(line); // check ants here
+	free(line);
 	flag = 0;
-
 	while ((get_next_line(0, &line) == 1))
 	{
 		if (ft_strcmp(line, "##start") == 0)
@@ -139,7 +123,10 @@ t_graph *start_parser(t_graph *gr)
 		else if (ft_strcmp(line, "##end") == 0)
 			g_end = gr->vector->elems;
 		else if (line[0] == '#')
+		{
+			free(line);
 			continue ;
+		}
 		else 
 		{
 			split = ft_strsplit(line, ' ');
@@ -153,11 +140,10 @@ t_graph *start_parser(t_graph *gr)
 				gr = get_edge(gr, split);
 			}
 			else
-            {
-                printf("keks\n");
 				throw_error(gr);
-            }
+			clear_mas(split);
 		}
+		free(line);
 	}
 	return (gr);
 }
