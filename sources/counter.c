@@ -55,6 +55,8 @@ int		set_koef(void)
 
 t_path	*counter(t_path *path)
 {
+	if(path->steps)
+		free(path->steps);
 	if (path->size > 1)
 		return (counter2(path));
 	path->steps = (int*)malloc(sizeof(int) * 1);

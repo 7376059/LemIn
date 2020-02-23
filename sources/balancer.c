@@ -85,6 +85,5 @@ t_path	*balancer(t_path *path)
 	rez = ways_steps(path);
 	path->steps = min_gap(path->steps, rez, path->step_elems);
 	free(rez);
-	rez = ways_steps(path);
 	return (path);
 }
