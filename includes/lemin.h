@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../library/includes/libft.h"
+# include "../libft/includes/libft.h"
 # include <fcntl.h>
 # include <stdio.h>
 

@@ -37,7 +37,7 @@ ODIR = objects
 _OBJ = $(_SRC:.c=.o)
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
-LDIR = library
+LDIR = libft
 _LIB = libft.a
 LIB = $(patsubst %,$(LDIR)/%,$(_LIB))
 
@@ -45,7 +45,7 @@ all: $(BIN)
 
 $(BIN): $(OBJ)
 	@make re -C $(LDIR)
-	@gcc -o $@ $^ library/libft.a -I $(IDIR)
+	@gcc -o $@ $^ $(LIB) -I $(IDIR)
 
 $(ODIR)/%.o: $(SDIR)/%.c $(DEPS)
 	@mkdir -p objects

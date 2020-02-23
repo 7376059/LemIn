@@ -12,20 +12,8 @@
 
 #include "lemin.h"
 
-// malloc error .. ?
-// free
-
-// недостижимые вершины 
-
-// кол-во муравьев меньше кратчайшего пути
-
-// алгоритм суурбале не до конца
-
-// дейкстра брейкнулся => путей нет, суурбале стоп
-
-void	create_arr(int size)
+void	create_arr(int size) // free
 {
-	// free
 	int	i;
 	
 	g_INF = 10000000;
