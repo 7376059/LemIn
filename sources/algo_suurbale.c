@@ -6,7 +6,7 @@
 /*   By: efriesen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/06 18:21:05 by efriesen          #+#    #+#             */
-/*   Updated: 2020/02/23 17:44:16 by dgrady           ###   ########.fr       */
+/*   Updated: 2020/02/23 19:59:53 by efriesen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,16 +101,35 @@ void	modific_cost(t_vertex *vertex)
 	}
 }
 
+void	clear_path(t_path *paths)
+{
+	clear_int_array(paths->ways, paths->size);
+	free(paths->steps);
+	free(paths);
+}
+
+void	clear_all(t_path *path, t_path *best)
+{
+	clear_path(best);
+	clear_path(path);
+	
+	free(g_dest);
+	free(g_parent);
+	free(g_visit);
+}
+
 void	algo_suurbale(t_graph *graph)
 {
-	int i = -1;
-	
 	t_path	*paths;
 	t_path	*best_choice;
 
 	init_path(&best_choice);
 	init_path(&paths);
-	
+
+	g_dest = NULL;
+	g_parent = NULL;
+	g_visit = NULL;
+
 	while (1)
 	{
 		algo_dijkstra(graph);
@@ -120,13 +139,9 @@ void	algo_suurbale(t_graph *graph)
 
 		if (g_dest[g_end] == g_INF)
 			break ;
-            
+		
 		add_way(&paths);
 		sort_paths(&paths);
-		
-		t_path *path;
-		path = paths;
-		
 		paths = counter(paths);
 		
 		if (best_choice->final_steps == 0 ||
@@ -136,10 +151,6 @@ void	algo_suurbale(t_graph *graph)
 		remove_way(graph);
 		modific_cost(graph->vertex);
 	}
-	i	= -1;
-	printf ("ants %d\n", g_ants);
-	printf ("steps %d\n", best_choice->step_elems);
-	while (++i < best_choice->step_elems)
-		printf("%d\n", best_choice->steps[i]);
-	ants_mover(best_choice, graph->vector->names);
+	//ants_mover(best_choice, graph->vector->names);
+	clear_all(paths, best_choice);
 }

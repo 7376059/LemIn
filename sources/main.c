@@ -6,7 +6,7 @@
 /*   By: dgrady <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/18 19:27:51 by dgrady            #+#    #+#             */
-/*   Updated: 2020/02/23 17:40:30 by dgrady           ###   ########.fr       */
+/*   Updated: 2020/02/23 19:57:06 by efriesen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,5 +32,7 @@ int main(void)
     //printf("ants = %d, elenms = %d\n steps = %d\n", kek->steps[0], kek->step_elems, kek->final_steps);
 
 	//moover(kek, gr->vector->names);
+	
+	clear_graph(gr);
     return (0);
 }

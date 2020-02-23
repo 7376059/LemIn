@@ -6,7 +6,7 @@
 /*   By: dgrady <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/18 19:18:10 by dgrady            #+#    #+#             */
-/*   Updated: 2020/02/23 18:09:29 by dgrady           ###   ########.fr       */
+/*   Updated: 2020/02/23 19:56:29 by efriesen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,8 @@ t_edge *add_edge(t_edge *start, int a);
 t_edge *init_edge(int a);
 t_vertex *add_vertex(t_vertex *start, int number);
 t_vertex *init_vertex(int number);
+
+void	clear_int_array(int **ways, int size);
 
 
 t_graph *start_parser(t_graph *gr);

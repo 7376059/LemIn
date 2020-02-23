@@ -6,7 +6,7 @@
 /*   By: efriesen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/03 21:44:17 by efriesen          #+#    #+#             */
-/*   Updated: 2020/02/22 20:11:24 by efriesen         ###   ########.fr       */
+/*   Updated: 2020/02/23 16:24:13 by efriesen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,19 @@ void	create_arr(int size) // free
 	int	i;
 	
 	g_INF = 10000000;
+	if (g_dest != NULL)
+		free(g_dest);
 	g_dest = (int*)malloc(sizeof(int) * size);
 	i = -1;
 	while (++i < size)
 		g_dest[i] = g_INF;
 	g_dest[g_start] = 0;
+	if (g_parent != NULL)
+		free(g_parent);
 	g_parent = (int*)ft_memalloc(sizeof(int) * size);
 	g_parent[g_start] = -1;
+	if (g_visit != NULL)
+		free(g_visit);
 	g_visit = (int*)ft_memalloc(sizeof(int) * size);
 }
 

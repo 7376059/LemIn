@@ -6,33 +6,54 @@
 /*   By: efriesen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/17 16:47:02 by efriesen          #+#    #+#             */
-/*   Updated: 2020/02/22 19:33:55 by efriesen         ###   ########.fr       */
+/*   Updated: 2020/02/23 19:33:07 by efriesen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lemin.h"
 
-int     **create_array_of_ants(int **ways, int size_ways, int *steps, int size_steps)
+int **create_array_of_ants(int *steps, int size)
 {
-	int **ants;
+	int **rez;
 	int i;
 	int j;
-	int k;
+	int ants;
 
-	ants = (int**)malloc(sizeof(int*) * size_ways);
+	i = -1;
+	rez = (int**)malloc(sizeof(int*) * size);
+	while(++i < size)
+		rez[i] = (int*)malloc(sizeof(int) * steps[i]);
+	i = 0;
+	ants = 1;
+	int check = size;
+
+	while(ants <= g_ants)
+	{
+		j = -1;
+		while(++j < check)
+		{
+			rez[j][i] = ants;
+			ants++;
+			if(ants > g_ants)
+				break;
+		}
+		i++;
+		if (check > 1)
+			if (i >= steps[check - 1])
+				check--;
+	}
+	return (rez);
+
+}
+
+void	clear_int_array(int **arr, int size_ways)
+{
+	int i;
+
 	i = -1;
 	while (++i < size_ways)
-	{
-		ants[i] = (int*)malloc(sizeof(int) * steps[i]);
-		j = i + 1;
-		k = -1;
-		while (++k < steps[i])
-		{
-			ants[i][k] = j;
-			j += 3;
-		}
-	}
-	return (ants);
+		free(arr[i]);
+	free(arr);
 }
 
 void    ants_mover(t_path *paths, char **names)
@@ -42,7 +63,7 @@ void    ants_mover(t_path *paths, char **names)
 	int i;
 	int j;
 
-	ants = create_array_of_ants(paths->ways, paths->size, paths->steps, paths->step_elems);
+	ants = create_array_of_ants(paths->steps, paths->step_elems);
 
 	current_step = 0;
 	while (++current_step <= paths->final_steps)
@@ -58,4 +79,5 @@ void    ants_mover(t_path *paths, char **names)
 		}
 		ft_printf("\n");
 	}
+	clear_int_array(ants, paths->size);
 }
