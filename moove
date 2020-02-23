@@ -1,0 +1,34 @@
+int **set_numbers(int *steps, int size)
+{
+	int **rez;
+	int i;
+	int j;
+	int ants;
+
+	i = -1;
+	rez = (int**)malloc(sizeof(int*) * size);
+	while(++i < size)
+		rez[i] = (int*)malloc(sizeof(int) * steps[i]);
+	i = 0;
+	ants = 1;
+	//printf("\nsize = %d\n", size);
+	int check = size;
+
+	while(ants <= g_ants)
+	{
+		j = -1;
+		while(++j < check)
+		{
+			rez[j][i] = ants;
+			ants++;
+			if(ants > g_ants)
+				break;
+		}
+		i++;
+		if (check > 1)
+			if (i >= steps[check - 1])
+				check--;
+	}
+	return (rez);
+
+}
