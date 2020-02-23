@@ -84,8 +84,6 @@ t_path	*counter2(t_path *path)
 
 	ants = g_ants;
 	rez = 0;
-	if (path->size == 2)
-		printf ("hello\n");
 	while (ants > 0)
 	{
 		count = 1;

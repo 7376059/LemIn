@@ -102,9 +102,11 @@ t_graph	*start_parser(t_graph *gr)
 	if (!(get_next_line(0, &line)))
 			throw_error(gr);
 	g_ants = get_ants(line, gr);
+	ft_printf("%s\n", line);
 	free(line);
 	while ((get_next_line(0, &line) == 1))
 	{
+		ft_printf("%s\n", line);
 		if (ft_strcmp(line, "##start") == 0)
 			g_start = gr->vector->elems;
 		else if (ft_strcmp(line, "##end") == 0)
