@@ -6,7 +6,7 @@
 #    By: efriesen <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/02/22 16:49:55 by efriesen          #+#    #+#              #
-#    Updated: 2020/02/23 18:07:03 by dgrady           ###   ########.fr        #
+#    Updated: 2020/02/24 14:00:19 by efriesen         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -57,7 +57,7 @@ clean:
 	@rm -rf $(ODIR)
 
 fclean: clean
-	@rm $(LIB)
-	@rm $(BIN)
+	@rm -f $(LIB)
+	@rm -f $(BIN)
 
 re: fclean all
