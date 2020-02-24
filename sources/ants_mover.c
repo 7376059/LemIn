@@ -6,7 +6,7 @@
 /*   By: efriesen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/17 16:47:02 by efriesen          #+#    #+#             */
-/*   Updated: 2020/02/23 19:33:07 by efriesen         ###   ########.fr       */
+/*   Updated: 2020/02/24 17:08:06 by dgrady           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,29 +18,41 @@ int **create_array_of_ants(int *steps, int size)
 	int i;
 	int j;
 	int ants;
+	int  check;
 
 	i = -1;
 	rez = (int**)malloc(sizeof(int*) * size);
 	while(++i < size)
 		rez[i] = (int*)malloc(sizeof(int) * steps[i]);
+/*
+	i = -1;
+	while (++i < size)
+	{
+		j = -1;
+		while (++j < steps[i])
+			rez[i][j] = -1;
+	}
+
+*/
+
 	i = 0;
 	ants = 1;
-	int check = size;
-
+	check = size - 1;
+	//printf("size = %d\nants = %d\n", size, g_ants);
+	
 	while(ants <= g_ants)
 	{
 		j = -1;
-		while(++j < check)
+		while (++j <= check)
 		{
 			rez[j][i] = ants;
 			ants++;
-			if(ants > g_ants)
-				break;
+			if (ants > g_ants)
+				break ;
 		}
 		i++;
-		if (check > 1)
-			if (i >= steps[check - 1])
-				check--;
+		while (steps[check] == i)
+			check--;
 	}
 	return (rez);
 
@@ -64,7 +76,30 @@ void    ants_mover(t_path *paths, char **names)
 	int j;
 
 	ants = create_array_of_ants(paths->steps, paths->step_elems);
-	
+	/*
+	i = -1;
+	while (++i < paths->step_elems)
+	{
+		j = -1;
+		while (++j < paths->steps[i])
+		{
+			printf("%d ", ants[i][j]);
+		}
+
+		printf("\n");
+	}
+	while(++i < paths->step_elems)
+	{
+		printf("%d | ", paths->steps[i]);
+		j = 0;
+		while (++j <= paths->ways[i][0])
+		{
+			printf("%s", names[paths->ways[i][j]]);
+		printf(" - ");
+		}
+		printf("\n");
+	}	
+	*/	
 	current_step = 0;
 	while (++current_step <= paths->final_steps)
 	{
@@ -79,6 +114,6 @@ void    ants_mover(t_path *paths, char **names)
 		}
 		ft_printf("\n");
 	}
-	clear_int_array(ants, paths->size);
 
+	clear_int_array(ants, paths->size);
 }

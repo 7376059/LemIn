@@ -6,7 +6,7 @@
 /*   By: dgrady <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/23 16:50:06 by dgrady            #+#    #+#             */
-/*   Updated: 2020/02/23 17:59:11 by dgrady           ###   ########.fr       */
+/*   Updated: 2020/02/24 17:11:43 by dgrady           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,8 @@ t_path	*counter(t_path *path)
 	path->steps[0] = g_ants;
 	path->step_elems = 1;
 	path->final_steps = g_ants + path->ways[0][0];
+	if (path->step_elems == 1 && path->ways[0][0] == 1)
+		        path->final_steps -= 1;
 	return (path);
 }
 
@@ -71,6 +73,8 @@ t_path	*balanc_path(t_path *path)
 	path = balancer(path);
 	path->final_steps = path->steps[0] + path->ways[0][0] - 1;
 	steps_creator(0, 0, 1);
+	if (path->step_elems == 1 && path->ways[0][0] == 1)
+		path->final_steps -= 1;
 	return (path);
 }
 
@@ -91,7 +95,7 @@ t_path	*counter2(t_path *path)
 		while (first > path->ways[count][0])
 		{
 			temp = (first - path->ways[count][0]) / count;
-			first = temp + path->ways[count][0] - 1 + (temp * set_koef()) / 10;
+			first = temp + path->ways[count][0] - 1 + (temp * set_koef());
 			count++;
 			if (count > path->size - 1)
 				break ;
