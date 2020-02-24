@@ -151,6 +151,6 @@ void	algo_suurbale(t_graph *graph)
 		remove_way(graph);
 		modific_cost(graph->vertex);
 	}
-	//ants_mover(best_choice, graph->vector->names);
+	ants_mover(best_choice, graph->vector->names);
 	clear_all(paths, best_choice);
 }

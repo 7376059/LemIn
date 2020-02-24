@@ -64,7 +64,7 @@ void    ants_mover(t_path *paths, char **names)
 	int j;
 
 	ants = create_array_of_ants(paths->steps, paths->step_elems);
-
+	
 	current_step = 0;
 	while (++current_step <= paths->final_steps)
 	{
@@ -72,7 +72,7 @@ void    ants_mover(t_path *paths, char **names)
 		while (++i < current_step)
 		{
 			j = -1;
-			while (++j < paths->size && i < paths->steps[j])
+			while (++j < paths->step_elems && i < paths->steps[j])
 				if (current_step - i <= paths->ways[j][0])
 					ft_printf("L%d-%s ", ants[j][i], names[paths->ways[j][current_step - i]]);
 
@@ -80,4 +80,5 @@ void    ants_mover(t_path *paths, char **names)
 		ft_printf("\n");
 	}
 	clear_int_array(ants, paths->size);
+
 }
