@@ -24,7 +24,6 @@ int **create_array_of_ants(int *steps, int size)
 	rez = (int**)malloc(sizeof(int*) * size);
 	while(++i < size)
 		rez[i] = (int*)malloc(sizeof(int) * steps[i]);
-/*
 	i = -1;
 	while (++i < size)
 	{
@@ -33,13 +32,11 @@ int **create_array_of_ants(int *steps, int size)
 			rez[i][j] = -1;
 	}
 
-*/
 
 	i = 0;
 	ants = 1;
 	check = size - 1;
 	//printf("size = %d\nants = %d\n", size, g_ants);
-	
 	while(ants <= g_ants)
 	{
 		j = -1;
@@ -76,7 +73,13 @@ void    ants_mover(t_path *paths, char **names)
 	int j;
 
 	ants = create_array_of_ants(paths->steps, paths->step_elems);
-	/*
+
+	i = -1;
+	//ПУТЬ|КОЛВО_МУРАВЬЕВ КОТОРОЕ ПУСКАЮ В ЭТОТ ПУТЬ| ДЛИННА ПУТИ
+	printf("WAY\t| ANTS\t| SIZE\n");	
+	while(++i < paths->step_elems)
+		printf("[%d] \t| %d \t| %d\n", i, paths->steps[i], paths->ways[i][0]);
+	// ВЫВОЖУ САМ МАССИВ
 	i = -1;
 	while (++i < paths->step_elems)
 	{
@@ -88,6 +91,8 @@ void    ants_mover(t_path *paths, char **names)
 
 		printf("\n");
 	}
+
+	/*
 	while(++i < paths->step_elems)
 	{
 		printf("%d | ", paths->steps[i]);
@@ -99,7 +104,8 @@ void    ants_mover(t_path *paths, char **names)
 		}
 		printf("\n");
 	}	
-	*/	
+	*/
+	/*
 	current_step = 0;
 	while (++current_step <= paths->final_steps)
 	{
@@ -114,6 +120,6 @@ void    ants_mover(t_path *paths, char **names)
 		}
 		ft_printf("\n");
 	}
-
-	clear_int_array(ants, paths->size);
+	*/
+	clear_int_array(ants, paths->step_elems);
 }
