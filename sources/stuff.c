@@ -45,7 +45,7 @@ int		get_ants(char *line, t_graph *gr)
 
 	i = -1;
 	while (line[++i])
-		if (ft_isdigit(line[i] == 0))
+		if (ft_isdigit(line[i]) == 0)
 			throw_error(gr);
 	return (ft_atoi(line));
 }
