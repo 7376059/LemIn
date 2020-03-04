@@ -19,8 +19,8 @@ void	init_path(t_path **paths)
 
 	*paths = (t_path*)malloc(sizeof(t_path));
 	path = (*paths);
-	path->max_ways = 1;
-	path->max_path = 1;
+	path->max_ways = 100; // еще раз проверить память
+	path->max_path = 100;
 	path->size = 0;
 	path->final_steps = 0;
 	path->step_elems = 0;
@@ -89,7 +89,7 @@ void	swap_paths(t_path **path, int a, int b)
 		(*path)->ways[b][i] = (*path)->ways[(*path)->size][i];
 }
 
-void	sort_paths(t_path **path)
+void	sort_paths(t_path **path) // лишние действия
 {
 	int max_path;
 	int position;
@@ -112,8 +112,8 @@ void	sort_paths(t_path **path)
 				position = j;
 			}
 		}
-		if ((*path)->ways[(*path)->size - i - 1][0] == max_path)
-			break ;
+		//if ((*path)->ways[(*path)->size - i - 1][0] == max_path)
+		//	break ;
 		swap_paths(path, position, (*path)->size - i - 1);
 	}
 }

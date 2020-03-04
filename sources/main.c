@@ -19,11 +19,11 @@ int main(void)
 {
 	g_start = -1;
 	g_end = -1;
-    
-	t_graph *gr = init_graph();
+
+	t_list_graph *gr = init_list_graph();
 	gr = start_parser(gr);
 
-	ft_printf("\n");
+	//ft_printf("\n");
 	algo_suurbale(gr);
 
 	clear_graph(gr);

@@ -12,11 +12,11 @@
 
 #include "lemin.h"
 
-t_graph	*init_graph(void)
+t_list_graph	*init_list_graph(void)
 {
-	t_graph *rez;
+	t_list_graph *rez;
 
-	rez = (t_graph*)malloc(sizeof(t_graph));
+	rez = (t_list_graph*)malloc(sizeof(t_list_graph));
 	rez->vector = init_vector();
 	rez->vertex = NULL;
 	return (rez);
@@ -32,14 +32,14 @@ int		get_mas_length(char **mas)
 	return (i);
 }
 
-void	throw_error(t_graph *gr)
+void	throw_error(t_list_graph *gr)
 {
 	write(1, "Error\n", 6);
 	clear_graph(gr);
 	exit(0);
 }
 
-int		get_ants(char *line, t_graph *gr)
+int		get_ants(char *line, t_list_graph *gr)
 {
 	int i;
 

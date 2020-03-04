@@ -12,7 +12,7 @@
 
 #include "lemin.h"
 
-t_graph	*get_name(t_graph *gr, char **line)
+t_list_graph	*get_name(t_list_graph *gr, char **line)
 {
 	static int i = -1;
 
@@ -27,7 +27,7 @@ t_graph	*get_name(t_graph *gr, char **line)
 	return (gr);
 }
 
-int		validate_edge(t_graph *gr, char **name)
+int		validate_edge(t_list_graph *gr, char **name)
 {
 	int	i;
 	int flag;
@@ -46,7 +46,7 @@ int		validate_edge(t_graph *gr, char **name)
 	return (0);
 }
 
-t_graph	*get_edge(t_graph *gr, char **line)
+t_list_graph	*get_edge(t_list_graph *gr, char **line)
 {
 	int			first;
 	int			second;
@@ -73,7 +73,7 @@ t_graph	*get_edge(t_graph *gr, char **line)
 	return (gr);
 }
 
-t_graph	*norm_parcer(t_graph *gr, char *line)
+t_list_graph	*norm_parcer(t_list_graph *gr, char *line)
 {
 	char		**split;
 	static int	flag = 0;
@@ -94,7 +94,7 @@ t_graph	*norm_parcer(t_graph *gr, char *line)
 	return (gr);
 }
 
-t_graph	*start_parser(t_graph *gr)
+t_list_graph	*start_parser(t_list_graph *gr)
 {
 	char	*line;
 	char	a;
@@ -102,11 +102,11 @@ t_graph	*start_parser(t_graph *gr)
 	if (!(get_next_line(0, &line)))
 			throw_error(gr);
 	g_ants = get_ants(line, gr);
-	ft_printf("%s\n", line);
+	//ft_printf("%s\n", line);
 	free(line);
 	while ((get_next_line(0, &line) == 1))
 	{
-		ft_printf("%s\n", line);
+		//ft_printf("%s\n", line);
 		if (ft_strcmp(line, "##start") == 0)
 			g_start = gr->vector->elems;
 		else if (ft_strcmp(line, "##end") == 0)

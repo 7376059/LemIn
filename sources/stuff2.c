@@ -40,7 +40,7 @@ void	clear_edge(t_edge *edge)
 	free(slow);
 }
 
-void	clear_graph(t_graph *gr)
+void	clear_graph(t_list_graph *gr)
 {
 	int			i;
 	t_vertex	*fast;
@@ -67,7 +67,7 @@ void	clear_graph(t_graph *gr)
 	free(gr);
 }
 
-int		get_number(t_graph *gr, char *name)
+int		get_number(t_list_graph *gr, char *name)
 {
 	int i;
 

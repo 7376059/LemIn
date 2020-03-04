@@ -12,28 +12,62 @@
 
 #include "lemin.h"
 
-void	create_arr(int size) // free
+void	g_arrays_preparation(int size)
 {
 	int	i;
-	
-	g_INF = 10000000;
+
 	if (g_dest != NULL)
 		free(g_dest);
-	g_dest = (int*)malloc(sizeof(int) * size);
-	i = -1;
-	while (++i < size)
-		g_dest[i] = g_INF;
-	g_dest[g_start] = 0;
 	if (g_parent != NULL)
 		free(g_parent);
-	g_parent = (int*)ft_memalloc(sizeof(int) * size);
-	g_parent[g_start] = -1;
 	if (g_visit != NULL)
 		free(g_visit);
+
+	g_dest = (int*)malloc(sizeof(int) * size);
 	g_visit = (int*)ft_memalloc(sizeof(int) * size);
+	g_parent = (int*)ft_memalloc(sizeof(int) * size);
+	g_parent[g_start] = -1; // можно убрать
+
+	i = -1;
+	while (++i < size)
+		g_dest[i] = g_infinity;
+	g_dest[g_start] = 0;
 }
 
-void	algo_dijkstra(t_graph *graph)
+void algo_dijkstra(int **matrix, int size_matrix)
+{
+	int	min_dest_vertice;
+	int	i;
+	int	j;
+
+	g_arrays_preparation(size_matrix);
+	i = -1;
+	while (++i < size_matrix)
+	{
+		min_dest_vertice = -1;
+		j = -1;
+		while (++j < size_matrix)
+			if ((g_visit[j] == 0) &&
+				(min_dest_vertice == -1 || g_dest[j] < g_dest[min_dest_vertice]))
+				min_dest_vertice = j;
+		if (g_dest[min_dest_vertice] == g_infinity)
+			return ;
+		g_visit[min_dest_vertice] = 1;
+		j = -1;
+		while (++j < size_matrix)
+		{
+			if (matrix[min_dest_vertice][j] == -1)
+				continue ;
+			if (g_dest[min_dest_vertice] + matrix[min_dest_vertice][j] < g_dest[j])
+			{
+				g_dest[j] = g_dest[min_dest_vertice] + matrix[min_dest_vertice][j];
+				g_parent[j] = min_dest_vertice;
+			}
+		}
+	}
+}
+
+void	algo_dijkstra_list(t_list_graph *graph)
 {
 	t_vertex	*in;
 	t_edge		*edge;
@@ -41,8 +75,23 @@ void	algo_dijkstra(t_graph *graph)
 	int			i;
 	int			j;
 
-	create_arr(graph->vector->elems);
-	
+	// printf("g_dest: ");
+	// for (int l = 0; l < graph->vector->elems; l++)
+	// 	printf("%d ", g_dest[l]);
+	// printf("\n");
+	//
+	// printf("g_visit: ");
+	// for (int l = 0; l < graph->vector->elems; l++)
+	// 	printf("%d ", g_visit[l]);
+	// printf("\n");
+	//
+	// printf("g_parent: ");
+	// for (int l = 0; l < graph->vector->elems; l++)
+	// 	printf("%d ", g_parent[l]);
+	// printf("\n\n");
+
+	g_arrays_preparation(graph->vector->elems);
+
 	i = -1;
 	while (++i < graph->vector->elems)
 	{
@@ -51,7 +100,7 @@ void	algo_dijkstra(t_graph *graph)
 		while (++j < graph->vector->elems)
 			if ((g_visit[j] == 0) && (min == -1 || g_dest[j] < g_dest[min]))
 				min = j;
-		if (g_dest[min] == g_INF)
+		if (g_dest[min] == g_infinity)
 			break ;
 		g_visit[min] = 1;
 		in = graph->vertex;
@@ -69,4 +118,19 @@ void	algo_dijkstra(t_graph *graph)
 			edge = edge->next;
 		}
 	}
+
+	// printf("g_dest: ");
+	// for (int l = 0; l < graph->vector->elems; l++)
+	// 	printf("%d ", g_dest[l]);
+	// printf("\n");
+	//
+	// printf("g_visit: ");
+	// for (int l = 0; l < graph->vector->elems; l++)
+	// 	printf("%d ", g_visit[l]);
+	// printf("\n");
+	//
+	// printf("g_parent: ");
+	// for (int l = 0; l < graph->vector->elems; l++)
+	// 	printf("%d ", g_parent[l]);
+	// printf("\n\n");
 }
