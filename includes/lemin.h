@@ -18,11 +18,19 @@ int g_ants;
 int g_start;
 int g_end;
 
-int g_INF;
+int g_infinity;
 
 int	*g_dest;
 int *g_visit;
 int	*g_parent;
+
+typedef struct s_graph
+{
+	int max_size_matrix;
+	int	elems_in_matrix; // need this .. ?
+
+	int **adjacency_matrix;
+}	t_graph;
 
 typedef struct s_path
 {
@@ -31,7 +39,7 @@ typedef struct s_path
     int max_ways;
     int max_path;
 	int **ways;
-	            
+
     int step_elems;
     int *steps;
 
@@ -61,11 +69,11 @@ typedef struct s_vertex
 	struct s_vertex	*next;
 }				t_vertex;
 
-typedef struct s_graph 
-{	
+typedef struct s_list_graph
+{
 	struct s_vertex	*vertex;
 	struct s_vector *vector;
-}				t_graph;
+}				t_list_graph;
 
 void	ants_mover(t_path *path, char **names);
 void	save_best_choice(t_path **best_choice, t_path *path);
@@ -74,11 +82,12 @@ void    init_path(t_path **paths);
 void    sort_paths(t_path **path);
 void    detect_common_edge(t_path **path);
 
-void    print_graph(t_graph *gr);
+void    print_graph(t_list_graph *gr);
 void	print_way(char **names);
 
-void	algo_suurbale(t_graph *graph);
-void	algo_dijkstra(t_graph *graph);
+void	algo_suurbale(t_list_graph *graph);
+void	algo_dijkstra_list(t_list_graph *graph); // delete
+void  algo_dijkstra(int **matrix, int size_matrix);
 
 t_vector *realloc_vector(t_vector *temp, char *line);
 t_vector *vector_push(t_vector *temp, char *line);
@@ -91,19 +100,19 @@ t_vertex *init_vertex(int number);
 void	clear_int_array(int **ways, int size);
 
 
-t_graph *start_parser(t_graph *gr);
-t_graph *init_graph(void);
-void print_edges(t_graph *gr);
-void print_names(t_graph *gr);
+t_list_graph *start_parser(t_list_graph *gr);
+t_list_graph *init_list_graph(void);
+void print_edges(t_list_graph *gr);
+void print_names(t_list_graph *gr);
 
-void throw_error(t_graph *gr);
+void throw_error(t_list_graph *gr);
 int get_mas_length(char **mas);
 void clear_mas(char **mas);
 t_path *counter(t_path *path);
 t_path *counter2(t_path *path);
 t_path *balancer(t_path *path);
-int		get_number(t_graph *gr, char *name);
-int		get_ants(char *line, t_graph *gr);
+int		get_number(t_list_graph *gr, char *name);
+int		get_ants(char *line, t_list_graph *gr);
 int		validate_name(char **name);
-void	clear_graph(t_graph *gr);
+void	clear_graph(t_list_graph *gr);
 void    clear_mas(char **mas);
