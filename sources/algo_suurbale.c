@@ -140,7 +140,15 @@ t_graph	*init_graph(t_list_graph *list_graph)
 
 	graph = (t_graph*)malloc(sizeof(t_graph));
 	graph->elems_in_matrix = list_graph->vector->elems;
+	graph->amount_vertices = list_graph->vector->elems;
 	graph->max_size_matrix = list_graph->vector->elems * 2;
+
+	graph->source_vertices = (int*)ft_memalloc(sizeof(int) * graph->max_size_matrix);
+	i = -1;
+	while (++i < graph->amount_vertices)
+		graph->source_vertices[i] = i;
+
+	graph->duplicated_vertices = (int*)ft_memalloc(sizeof(int) * graph->amount_vertices);
 
 	graph->adjacency_matrix =
 		(int**)malloc(sizeof(int*) * graph->max_size_matrix);
@@ -178,11 +186,11 @@ void print_matrix(t_graph *graph, char **names)
 {
 	printf("     ");
 	for (int i = 0; i < graph->elems_in_matrix; i++)
-		printf("[%s] ", names[i]);
+		printf("[%s] ", names[graph->source_vertices[i]]);
 	printf("\n");
 	for (int i = 0; i < graph->elems_in_matrix; i++)
 	{
-		printf("[%s] ", names[i]);
+		printf("[%s] ", names[graph->source_vertices[i]]);
 		for (int j = 0; j < graph->elems_in_matrix; j++)
 			printf("%3d ", graph->adjacency_matrix[i][j]);
 		printf("\n");
@@ -225,15 +233,57 @@ void modify_and_remove_edges(int **matrix, int size_matrix)
 	remove_shortest_way(matrix, size_matrix);
 }
 
+void duplicate_vertices_in_shortest_way(t_graph *graph, int **matrix, int amount_vertices)
+{
+	int duplicate_vertice;
+	int	previos_vertice;
+	int	next_vertice;
+	int	i;
+
+	previos_vertice = g_end;
+	duplicate_vertice = g_parent[previos_vertice];
+	next_vertice = g_parent[duplicate_vertice];
+
+	while (next_vertice != -1) // while (g_parent[vertice] != -1)
+	{
+		// printf("prev: %d\n", previos_vertice);
+		// printf("curr: %d\n", duplicate_vertice);
+		// printf("next: %d\n\n", next_vertice);
+
+		if (graph->duplicated_vertices[duplicate_vertice] == 0)
+		{
+			graph->duplicated_vertices[duplicate_vertice] = 1;
+
+			matrix[graph->elems_in_matrix][next_vertice] = matrix[duplicate_vertice][next_vertice];
+			matrix[duplicate_vertice][next_vertice] = -1;
+			matrix[duplicate_vertice][graph->elems_in_matrix] = 0;
+
+			i = -1;
+			while (++i < amount_vertices)
+			{
+				if (matrix[i][duplicate_vertice] == -1 || i == previos_vertice)
+					continue ;
+				matrix[i][graph->elems_in_matrix] = matrix[i][duplicate_vertice];
+				matrix[i][duplicate_vertice] = -1;
+			}
+
+			graph->source_vertices[graph->elems_in_matrix] = duplicate_vertice;
+			graph->elems_in_matrix++;
+		}
+
+		previos_vertice = duplicate_vertice;
+		duplicate_vertice = next_vertice;
+		next_vertice = g_parent[duplicate_vertice];
+	}
+}
+
 void	algo_suurbale(t_list_graph *list_graph)
 {
 	t_path	*paths;
 	t_path	*best_choice;
-
 	t_graph	*graph;
-	graph = init_graph(list_graph);
 
-	//print_matrix(graph, list_graph->vector->names);
+	graph = init_graph(list_graph);
 
 	init_path(&best_choice);
 	init_path(&paths);
@@ -245,7 +295,15 @@ void	algo_suurbale(t_list_graph *list_graph)
 
 	while (1)
 	{
-		algo_dijkstra(graph->adjacency_matrix, graph->elems_in_matrix);
+		algo_dijkstra(graph->adjacency_matrix, graph->elems_in_matrix, graph->source_vertices);
+
+		// for (int i = 0; i < graph->elems_in_matrix; i++)
+		// {
+		// 	if (g_parent[i] == -1)
+		// 		continue ;
+		// 	printf("[%s - %s] ",list_graph->vector->names[i],list_graph->vector->names[g_parent[i]]);
+		// }
+		// printf("\n");
 
 		//algo_dijkstra_list(list_graph);
 
@@ -267,10 +325,20 @@ void	algo_suurbale(t_list_graph *list_graph)
 		//remove_way_list(list_graph);
 
 	  modify_and_remove_edges(graph->adjacency_matrix, graph->elems_in_matrix);
-		print_matrix(graph, list_graph->vector->names);
+		//print_matrix(graph, list_graph->vector->names);
+
+		duplicate_vertices_in_shortest_way(graph, graph->adjacency_matrix, graph->amount_vertices);
 		//modific_cost_list(list_graph->vertex);
+		//print_matrix(graph, list_graph->vector->names);
+
+		// for (int i = 0; i < graph->elems_in_matrix; i++)
+		//  printf("%d ", graph->source_vertices[i]);
+		// printf("\n");
+
+		exit(0);
 	}
-	//print_ways(paths, list_graph->vector->names);
+
+	print_ways(paths, list_graph->vector->names);
 	//ants_mover(best_choice, graph->vector->names);
 	clear_all(paths, best_choice);
 }

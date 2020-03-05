@@ -34,7 +34,7 @@ void	g_arrays_preparation(int size)
 	g_dest[g_start] = 0;
 }
 
-void algo_dijkstra(int **matrix, int size_matrix)
+void algo_dijkstra(int **matrix, int size_matrix, int *source_vertices)
 {
 	int	min_dest_vertice;
 	int	i;
@@ -61,7 +61,9 @@ void algo_dijkstra(int **matrix, int size_matrix)
 			if (g_dest[min_dest_vertice] + matrix[min_dest_vertice][j] < g_dest[j])
 			{
 				g_dest[j] = g_dest[min_dest_vertice] + matrix[min_dest_vertice][j];
-				g_parent[j] = min_dest_vertice;
+				//g_parent[j] = min_dest_vertice;
+				//СТРОЧКА НЕ ВЕРНАЯ
+				g_parent[source_vertices[j]] = source_vertices[min_dest_vertice];
 			}
 		}
 	}
