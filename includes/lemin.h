@@ -82,10 +82,12 @@ typedef struct s_list_graph
 
 void	ants_mover(t_path *path, char **names);
 void	save_best_choice(t_path **best_choice, t_path *path);
-void    add_way(t_path **path);
+void    add_way(t_path **path, int *source_vertices);
 void    init_path(t_path **paths);
 void    sort_paths(t_path **path);
 void    detect_common_edge(t_path **path);
+
+void detect_crossing_paths(t_path *path);
 
 void    print_graph(t_list_graph *gr);
 void	print_way(char **names);

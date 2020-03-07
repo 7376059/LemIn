@@ -23,7 +23,7 @@ int main(void)
 	t_list_graph *gr = init_list_graph();
 	gr = start_parser(gr);
 
-	//ft_printf("\n");
+	ft_printf("\n");
 	algo_suurbale(gr);
 
 	clear_graph(gr);

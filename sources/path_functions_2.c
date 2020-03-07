@@ -37,9 +37,18 @@ void	modific_ways(t_path **path, int i, int j, int k)
 
 	u = 0;
 	while (i + ++u < (*path)->ways[(*path)->size][0] + 1)
-		(*path)->ways[(*path)->size + 1][u] =
-			(*path)->ways[(*path)->size][i + u];
+		(*path)->ways[(*path)->size + 1][u] = (*path)->ways[(*path)->size][i + u];
 	(*path)->ways[(*path)->size + 1][0] = u - 1;
+
+	for (int j = 0; j < (*path)->size + 2; j++)
+	{
+		printf("[%d] ", (*path)->ways[j][0]);
+		for (int k = 1; k <= (*path)->ways[j][0]; k++)
+			printf("%d ", (*path)->ways[j][k]);
+		printf("\n");
+	}
+	printf("\n");
+
 	u = -1;
 	while (k + ++u < (*path)->ways[j][0] + 1)
 		(*path)->ways[(*path)->size][i + u] = (*path)->ways[j][k + u];
@@ -50,7 +59,79 @@ void	modific_ways(t_path **path, int i, int j, int k)
 	(*path)->ways[j][0] = u + k - 3;
 }
 
-void	detect_common_edge(t_path **path)
+void re_binding_paths(t_path *path, int crossing_path,
+	int position_in_crossing_path, int position_in_added_path)
+{
+	int length_re_binding;
+	int i;
+
+	length_re_binding = 0;
+	while (path->ways[path->size][position_in_added_path + length_re_binding + 1]
+		== path->ways[crossing_path][position_in_crossing_path  - length_re_binding - 1])
+		length_re_binding++;
+
+	//printf("length_re_binding [%d]\n", length_re_binding);
+
+	// printf("\nposition_in_crossing_path %d\n", position_in_crossing_path);
+	// printf("position_in_added_path %d\n", position_in_added_path);
+	// printf("length_re_binding %d\n\n", length_re_binding);
+
+	// for (int j = 0; j < path->size + 2; j++)
+	// {
+	// 	printf("[%d] ", path->ways[j][0]);
+	// 	for (int k = 1; k <= path->ways[j][0]; k++)
+	// 		printf("%d ", path->ways[j][k]);
+	// 	printf("\n");
+	// }
+	// printf("\n");
+
+	i = -1;
+	while ((++i + position_in_added_path + length_re_binding) <= path->ways[path->size][0])
+		path->ways[path->size + 1][i + 1] = path->ways[path->size][i + position_in_added_path + length_re_binding];
+	path->ways[path->size + 1][0] = i;
+
+	i = 0;
+	while (++i + position_in_crossing_path <= path->ways[crossing_path][0])
+		path->ways[path->size][position_in_added_path + i] = path->ways[crossing_path][position_in_crossing_path + i];
+	path->ways[path->size][0] = position_in_added_path + --i;
+
+	i = -1;
+	while (++i < path->ways[path->size + 1][0])
+		path->ways[crossing_path][position_in_crossing_path - length_re_binding + i] = path->ways[path->size + 1][i + 1];
+	path->ways[crossing_path][0] = position_in_crossing_path - length_re_binding + --i;
+
+	// for (int j = 0; j < path->size + 2; j++)
+	// {
+	// 	printf("[%d] ", path->ways[j][0]);
+	// 	for (int k = 1; k <= path->ways[j][0]; k++)
+	// 		printf("%d ", path->ways[j][k]);
+	// 	printf("\n");
+	// }
+	// printf("\n");
+}
+
+void detect_crossing_paths(t_path *path) // попробовать ускорить заменой переменной
+{
+	int position_in_added_path;
+	int position_in_current_path;
+	int current_path;
+
+	position_in_added_path = 1;
+	while (++position_in_added_path < path->ways[path->size][0] - 1)
+	{
+		current_path = -1;
+		while (++current_path < path->size)
+		{
+			position_in_current_path = 1;
+			while (++position_in_current_path < path->ways[current_path][0])
+				if (path->ways[path->size][position_in_added_path] == path->ways[current_path][position_in_current_path]
+					&& path->ways[path->size][position_in_added_path + 1] == path->ways[current_path][position_in_current_path - 1])
+					return (re_binding_paths(path, current_path, position_in_current_path, position_in_added_path));
+		}
+	}
+}
+
+void	detect_common_edge(t_path **path) // затестить скорость заменив разыменование
 {
 	int i;
 	int j;
@@ -66,8 +147,7 @@ void	detect_common_edge(t_path **path)
 			while (++k < (*path)->ways[j][0])
 			{
 				if (((*path)->ways[(*path)->size][i] == (*path)->ways[j][k])
-						&& ((*path)->ways[(*path)->size][i + 1]
-							== (*path)->ways[j][k - 1]))
+						&& ((*path)->ways[(*path)->size][i + 1]	== (*path)->ways[j][k - 1]))
 					return (modific_ways(path, i + 1, j, k + 1));
 			}
 		}

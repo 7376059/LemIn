@@ -129,6 +129,7 @@ void print_ways(t_path *path, char **names)
 				printf("%s ", names[path->ways[i][j]]);
 			printf("\n");
 	}
+	printf("\n");
 }
 
 t_graph	*init_graph(t_list_graph *list_graph)
@@ -192,7 +193,12 @@ void print_matrix(t_graph *graph, char **names)
 	{
 		printf("[%s] ", names[graph->source_vertices[i]]);
 		for (int j = 0; j < graph->elems_in_matrix; j++)
-			printf("%3d ", graph->adjacency_matrix[i][j]);
+		{
+			if (graph->adjacency_matrix[i][j] == -1)
+				printf("%3d ", graph->adjacency_matrix[i][j]);
+			else
+				printf("[%d] ", graph->adjacency_matrix[i][j]);
+		}
 		printf("\n");
 	}
 	printf("\n");
@@ -236,21 +242,21 @@ void modify_and_remove_edges(int **matrix, int size_matrix)
 void duplicate_vertices_in_shortest_way(t_graph *graph, int **matrix, int amount_vertices)
 {
 	int duplicate_vertice;
-	int	previos_vertice;
+	int	previous_vertice;
 	int	next_vertice;
 	int	i;
 
-	previos_vertice = g_end;
-	duplicate_vertice = g_parent[previos_vertice];
+	previous_vertice = g_end;
+	duplicate_vertice = g_parent[previous_vertice];
 	next_vertice = g_parent[duplicate_vertice];
 
 	while (next_vertice != -1) // while (g_parent[vertice] != -1)
 	{
-		// printf("prev: %d\n", previos_vertice);
+		// printf("prev: %d\n", previous_vertice);
 		// printf("curr: %d\n", duplicate_vertice);
 		// printf("next: %d\n\n", next_vertice);
 
-		if (graph->duplicated_vertices[duplicate_vertice] == 0)
+		if (graph->duplicated_vertices[graph->source_vertices[duplicate_vertice]] == 0)
 		{
 			graph->duplicated_vertices[duplicate_vertice] = 1;
 
@@ -261,7 +267,7 @@ void duplicate_vertices_in_shortest_way(t_graph *graph, int **matrix, int amount
 			i = -1;
 			while (++i < amount_vertices)
 			{
-				if (matrix[i][duplicate_vertice] == -1 || i == previos_vertice)
+				if (matrix[i][duplicate_vertice] == -1 || i == previous_vertice)
 					continue ;
 				matrix[i][graph->elems_in_matrix] = matrix[i][duplicate_vertice];
 				matrix[i][duplicate_vertice] = -1;
@@ -271,7 +277,7 @@ void duplicate_vertices_in_shortest_way(t_graph *graph, int **matrix, int amount
 			graph->elems_in_matrix++;
 		}
 
-		previos_vertice = duplicate_vertice;
+		previous_vertice = duplicate_vertice;
 		duplicate_vertice = next_vertice;
 		next_vertice = g_parent[duplicate_vertice];
 	}
@@ -297,12 +303,19 @@ void	algo_suurbale(t_list_graph *list_graph)
 	{
 		algo_dijkstra(graph->adjacency_matrix, graph->elems_in_matrix, graph->source_vertices);
 
-		// for (int i = 0; i < graph->elems_in_matrix; i++)
+		// for (int i = g_end; i != -1;)
 		// {
-		// 	if (g_parent[i] == -1)
-		// 		continue ;
-		// 	printf("[%s - %s] ",list_graph->vector->names[i],list_graph->vector->names[g_parent[i]]);
+		// 	printf("%s ", list_graph->vector->names[graph->source_vertices[i]]);
+		// 	i = g_parent[i];
 		// }
+		// printf("\n");
+
+			// for (int i = 0; i < graph->elems_in_matrix; i++)
+			// 	printf("%d ", g_dest[i]);
+			// printf("\n");
+
+		// for (int i = 0; i < graph->elems_in_matrix; i++)
+		// 		printf("%d ", g_parent[i]);
 		// printf("\n");
 
 		//algo_dijkstra_list(list_graph);
@@ -313,32 +326,40 @@ void	algo_suurbale(t_list_graph *list_graph)
 		if (g_dest[g_end] == g_infinity)
 			break ;
 
-		add_way(&paths);
+		//add_way_test(paths, graph->source_vertices);
+		add_way(&paths, graph->source_vertices);
+
+		//print_ways(paths, list_graph->vector->names);
+
+		// заменить двойные указатели
 		sort_paths(&paths); // что-то тут он крутит хуютит
-		paths = counter(paths);
+
+		paths = counter(paths); //  нахуй .. ?
 
 		if (best_choice->final_steps == 0 ||
 				best_choice->final_steps > paths->final_steps)
-			save_best_choice(&best_choice, paths);
+			save_best_choice(&best_choice, paths); // двойной указатель убрать можно .. ?
 
-		//print_matrix(graph, list_graph->vector->names);
+		// print_matrix(graph, list_graph->vector->names);
 		//remove_way_list(list_graph);
 
 	  modify_and_remove_edges(graph->adjacency_matrix, graph->elems_in_matrix);
-		//print_matrix(graph, list_graph->vector->names);
+		// print_matrix(graph, list_graph->vector->names);
 
 		duplicate_vertices_in_shortest_way(graph, graph->adjacency_matrix, graph->amount_vertices);
 		//modific_cost_list(list_graph->vertex);
-		//print_matrix(graph, list_graph->vector->names);
+		// print_matrix(graph, list_graph->vector->names);
+
 
 		// for (int i = 0; i < graph->elems_in_matrix; i++)
 		//  printf("%d ", graph->source_vertices[i]);
 		// printf("\n");
 
-		exit(0);
+		// printf("------------------------\n\n");
+		//exit(0);
 	}
 
-	print_ways(paths, list_graph->vector->names);
-	//ants_mover(best_choice, graph->vector->names);
+	//print_ways(paths, list_graph->vector->names);
+	ants_mover(best_choice, list_graph->vector->names);
 	clear_all(paths, best_choice);
 }
