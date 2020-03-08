@@ -19,8 +19,8 @@ void	init_path(t_path **paths)
 
 	*paths = (t_path*)malloc(sizeof(t_path));
 	path = (*paths);
-	path->max_ways = 100; // еще раз проверить память
-	path->max_path = 100;
+	path->max_ways = 10; // еще раз проверить память
+	path->max_path = 10;
 	path->size = 0;
 	path->final_steps = 0;
 	path->step_elems = 0;
@@ -31,33 +31,33 @@ void	init_path(t_path **paths)
 		path->ways[i] = (int*)malloc(sizeof(int) * path->max_path);
 }
 
-void	modific_ways(t_path **path, int i, int j, int k)
-{
-	int u;
-
-	u = 0;
-	while (i + ++u < (*path)->ways[(*path)->size][0] + 1)
-		(*path)->ways[(*path)->size + 1][u] = (*path)->ways[(*path)->size][i + u];
-	(*path)->ways[(*path)->size + 1][0] = u - 1;
-
-	for (int j = 0; j < (*path)->size + 2; j++)
-	{
-		printf("[%d] ", (*path)->ways[j][0]);
-		for (int k = 1; k <= (*path)->ways[j][0]; k++)
-			printf("%d ", (*path)->ways[j][k]);
-		printf("\n");
-	}
-	printf("\n");
-
-	u = -1;
-	while (k + ++u < (*path)->ways[j][0] + 1)
-		(*path)->ways[(*path)->size][i + u] = (*path)->ways[j][k + u];
-	(*path)->ways[(*path)->size][0] = i + u - 1;
-	u = -1;
-	while (++u < (*path)->ways[(*path)->size + 1][0] + 1)
-		(*path)->ways[j][k + u - 1] = (*path)->ways[(*path)->size + 1][u + 1];
-	(*path)->ways[j][0] = u + k - 3;
-}
+// void	modific_ways(t_path **path, int i, int j, int k)
+// {
+// 	int u;
+//
+// 	u = 0;
+// 	while (i + ++u < (*path)->ways[(*path)->size][0] + 1)
+// 		(*path)->ways[(*path)->size + 1][u] = (*path)->ways[(*path)->size][i + u];
+// 	(*path)->ways[(*path)->size + 1][0] = u - 1;
+//
+// 	for (int j = 0; j < (*path)->size + 2; j++)
+// 	{
+// 		printf("[%d] ", (*path)->ways[j][0]);
+// 		for (int k = 1; k <= (*path)->ways[j][0]; k++)
+// 			printf("%d ", (*path)->ways[j][k]);
+// 		printf("\n");
+// 	}
+// 	printf("\n");
+//
+// 	u = -1;
+// 	while (k + ++u < (*path)->ways[j][0] + 1)
+// 		(*path)->ways[(*path)->size][i + u] = (*path)->ways[j][k + u];
+// 	(*path)->ways[(*path)->size][0] = i + u - 1;
+// 	u = -1;
+// 	while (++u < (*path)->ways[(*path)->size + 1][0] + 1)
+// 		(*path)->ways[j][k + u - 1] = (*path)->ways[(*path)->size + 1][u + 1];
+// 	(*path)->ways[j][0] = u + k - 3;
+// }
 
 void re_binding_paths(t_path *path, int crossing_path,
 	int position_in_crossing_path, int position_in_added_path)
@@ -131,69 +131,115 @@ void detect_crossing_paths(t_path *path) // попробовать ускори�
 	}
 }
 
-void	detect_common_edge(t_path **path) // затестить скорость заменив разыменование
+// void	detect_common_edge(t_path **path) // затестить скорость заменив разыменование
+// {
+// 	int i;
+// 	int j;
+// 	int k;
+//
+// 	i = 0;
+// 	while (++i < (*path)->ways[(*path)->size][0] - 1)
+// 	{
+// 		j = -1;
+// 		while (++j < (*path)->size)
+// 		{
+// 			k = 1;
+// 			while (++k < (*path)->ways[j][0])
+// 			{
+// 				if (((*path)->ways[(*path)->size][i] == (*path)->ways[j][k])
+// 						&& ((*path)->ways[(*path)->size][i + 1]	== (*path)->ways[j][k - 1]))
+// 					return (modific_ways(path, i + 1, j, k + 1));
+// 			}
+// 		}
+// 	}
+// }
+
+// void	swap_paths(t_path **path, int a, int b)
+// {
+// 	int i;
+//
+// 	i = -1;
+// 	while (++i < (*path)->ways[a][0] + 1)
+// 		(*path)->ways[(*path)->size][i] = (*path)->ways[a][i];
+// 	i = -1;
+// 	while (++i < (*path)->ways[b][0] + 1)
+// 		(*path)->ways[a][i] = (*path)->ways[b][i];
+// 	i = -1;
+// 	while (++i < (*path)->ways[(*path)->size][0] + 1)
+// 		(*path)->ways[b][i] = (*path)->ways[(*path)->size][i];
+// }
+
+void swap_paths(t_path *paths, int p1, int p2)
 {
 	int i;
-	int j;
-	int k;
 
-	i = 0;
-	while (++i < (*path)->ways[(*path)->size][0] - 1)
+	i = -1;
+	while (++i <= paths->ways[p1][0])
+		paths->ways[paths->size][i] = paths->ways[p1][i];
+	i = -1;
+	while (++i <= paths->ways[p2][0])
+		paths->ways[p1][i] = paths->ways[p2][i];
+	i = -1;
+	while (++i <= paths->ways[paths->size][0])
+		paths->ways[p2][i] = paths->ways[paths->size][i];
+}
+
+void sort_paths(t_path *paths)
+{
+	int position_max_length_path;
+	int min_length_path;
+	int max_length_path;
+	int i;
+	int j;
+
+	i = -1;
+	while (++i < paths->size)
 	{
+		min_length_path = paths->ways[0][0];
+		max_length_path = 0;
 		j = -1;
-		while (++j < (*path)->size)
+		while (++j < paths->size - i)
 		{
-			k = 1;
-			while (++k < (*path)->ways[j][0])
+			if (min_length_path > paths->ways[j][0])
+				min_length_path = paths->ways[j][0];
+			if (paths->ways[j][0] > max_length_path)
 			{
-				if (((*path)->ways[(*path)->size][i] == (*path)->ways[j][k])
-						&& ((*path)->ways[(*path)->size][i + 1]	== (*path)->ways[j][k - 1]))
-					return (modific_ways(path, i + 1, j, k + 1));
+				max_length_path = paths->ways[j][0];
+				position_max_length_path = j;
 			}
 		}
+		if (max_length_path > min_length_path)
+			swap_paths(paths, position_max_length_path, paths->size - i - 1);
+		else
+			return ;
 	}
 }
 
-void	swap_paths(t_path **path, int a, int b)
-{
-	int i;
-
-	i = -1;
-	while (++i < (*path)->ways[a][0] + 1)
-		(*path)->ways[(*path)->size][i] = (*path)->ways[a][i];
-	i = -1;
-	while (++i < (*path)->ways[b][0] + 1)
-		(*path)->ways[a][i] = (*path)->ways[b][i];
-	i = -1;
-	while (++i < (*path)->ways[(*path)->size][0] + 1)
-		(*path)->ways[b][i] = (*path)->ways[(*path)->size][i];
-}
-
-void	sort_paths(t_path **path) // лишние действия
-{
-	int max_path;
-	int position;
-	int i;
-	int j;
-
-	if ((*path)->size == 1)
-		return ;
-	i = -1;
-	while (++i < (*path)->size)
-	{
-		max_path = 0;
-		position = 0;
-		j = -1;
-		while (++j < (*path)->size - i)
-		{
-			if ((*path)->ways[j][0] > max_path)
-			{
-				max_path = (*path)->ways[j][0];
-				position = j;
-			}
-		}
-		//if ((*path)->ways[(*path)->size - i - 1][0] == max_path)
-		//	break ;
-		swap_paths(path, position, (*path)->size - i - 1);
-	}
-}
+// void	sort_paths(t_path *path) // лишние действия
+// {
+// 	int max_path;
+// 	int position;
+// 	int i;
+// 	int j;
+//
+// 	if ((*path)->size == 1)
+// 		return ;
+// 	i = -1;
+// 	while (++i < (*path)->size)
+// 	{
+// 		max_path = 0;
+// 		position = 0;
+// 		j = -1;
+// 		while (++j < (*path)->size - i)
+// 		{
+// 			if ((*path)->ways[j][0] > max_path)
+// 			{
+// 				max_path = (*path)->ways[j][0];
+// 				position = j;
+// 			}
+// 		}
+// 		//if ((*path)->ways[(*path)->size - i - 1][0] == max_path)
+// 		//	break ;
+// 		swap_paths(path, position, (*path)->size - i - 1);
+// 	}
+// }

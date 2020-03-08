@@ -81,10 +81,10 @@ typedef struct s_list_graph
 }				t_list_graph;
 
 void	ants_mover(t_path *path, char **names);
-void	save_best_choice(t_path **best_choice, t_path *path);
-void    add_way(t_path **path, int *source_vertices);
+void	save_best_choice(t_path *best_choice, t_path *path);
+void    add_way(t_path *path, int *source_vertices);
 void    init_path(t_path **paths);
-void    sort_paths(t_path **path);
+void    sort_paths(t_path *path);
 void    detect_common_edge(t_path **path);
 
 void detect_crossing_paths(t_path *path);
@@ -115,11 +115,11 @@ void print_names(t_list_graph *gr);
 void throw_error(t_list_graph *gr);
 int get_mas_length(char **mas);
 void clear_mas(char **mas);
-t_path *counter(t_path *path);
-t_path *counter2(t_path *path);
-t_path *balancer(t_path *path);
+void counter(t_path *path);
+void counter2(t_path *path);
+void balancer(t_path *path);
 int		get_number(t_list_graph *gr, char *name);
 int		get_ants(char *line, t_list_graph *gr);
 int		validate_name(char **name);
-void	clear_graph(t_list_graph *gr);
+void	clear_graph_list(t_list_graph *gr);
 void    clear_mas(char **mas);

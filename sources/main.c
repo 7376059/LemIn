@@ -26,6 +26,6 @@ int main(void)
 	ft_printf("\n");
 	algo_suurbale(gr);
 
-	clear_graph(gr);
+	clear_graph_list(gr);
     return (0);
 }

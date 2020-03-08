@@ -78,12 +78,11 @@ int		*min_gap(int *mas, int *rez, int size)
 	return (norm_balanc(mas, size));
 }
 
-t_path	*balancer(t_path *path)
+void balancer(t_path *path)
 {
 	int *rez;
 
 	rez = ways_steps(path);
 	path->steps = min_gap(path->steps, rez, path->step_elems);
 	free(rez);
-	return (path);
 }

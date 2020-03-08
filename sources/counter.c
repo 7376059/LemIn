@@ -53,7 +53,7 @@ int		set_koef(void)
 	return (9);
 }
 
-t_path	*counter(t_path *path)
+void counter(t_path *path)
 {
 	if(path->steps)
 		free(path->steps);
@@ -65,20 +65,18 @@ t_path	*counter(t_path *path)
 	path->final_steps = g_ants + path->ways[0][0];
 	if (path->step_elems == 1 && path->ways[0][0] == 1)
 		        path->final_steps -= 1;
-	return (path);
 }
 
-t_path	*balanc_path(t_path *path)
+void balanc_path(t_path *path)
 {
-	path = balancer(path);
+	balancer(path);
 	path->final_steps = path->steps[0] + path->ways[0][0] - 1;
 	steps_creator(0, 0, 1);
 	if (path->step_elems == 1 && path->ways[0][0] == 1)
 		path->final_steps -= 1;
-	return (path);
 }
 
-t_path	*counter2(t_path *path)
+void counter2(t_path *path)
 {
 	int ants;
 	int first;

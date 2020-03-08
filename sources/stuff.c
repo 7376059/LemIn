@@ -35,7 +35,7 @@ int		get_mas_length(char **mas)
 void	throw_error(t_list_graph *gr)
 {
 	write(1, "Error\n", 6);
-	clear_graph(gr);
+	clear_graph_list(gr);
 	exit(0);
 }
 

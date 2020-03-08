@@ -5,7 +5,7 @@ t_vector	*init_vector()
 	t_vector *rez;
 
 	rez = (t_vector*)malloc(sizeof(t_vector));
-	rez->size = 10000; // протестить с 1
+	rez->size = 100; //  проеб памяти
 	rez->elems = 0;
 	rez->names = (char**)malloc(sizeof(char*) * rez->size);
 	return(rez);

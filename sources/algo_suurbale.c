@@ -20,92 +20,92 @@
 
 // -wall -werror -wextra
 
-void	remove_list_elem(t_edge **begin, t_edge *remove)
-{
-	if (remove == NULL)
-	{
-		printf("ERROR\n");
-		exit(0);
-	}
+// void	remove_list_elem(t_edge **begin, t_edge *remove)
+// {
+// 	if (remove == NULL)
+// 	{
+// 		printf("ERROR\n");
+// 		exit(0);
+// 	}
+//
+// 	t_edge	*edge;
+// 	t_edge	*prev_edge;
+//
+// 	edge = *begin;
+// 	prev_edge = NULL;
+//
+// 	while (edge != remove)
+// 	{
+// 		prev_edge = edge;
+// 		edge = edge->next;
+// 	}
+//
+// 	if (prev_edge == NULL)
+// 		*begin = (*begin)->next;
+// 	else if (edge->next == NULL)
+// 		prev_edge->next = NULL;
+// 	else
+// 		prev_edge->next = edge->next;
+// 	free(edge);
+// }
 
-	t_edge	*edge;
-	t_edge	*prev_edge;
-
-	edge = *begin;
-	prev_edge = NULL;
-
-	while (edge != remove)
-	{
-		prev_edge = edge;
-		edge = edge->next;
-	}
-
-	if (prev_edge == NULL)
-		*begin = (*begin)->next;
-	else if (edge->next == NULL)
-		prev_edge->next = NULL;
-	else
-		prev_edge->next = edge->next;
-	free(edge);
-}
-
-void	remove_way_list(t_list_graph *graph)
-{
-	t_vertex	*vertex;
-	t_edge		*edge;
-	int			i;
-	int			j;
-	int 		k;
-
-	// todo: придумать индексам говорящие имена (для vertex то же)
-	i = g_end;
-	// todo: здесь, вынести -1 в глобальную константу и назвать её (признак отсутствия вершины)
-	while (i != -1)
-	{
-		vertex = graph->vertex;
-		j = g_parent[i];
-
-		k = -1;
-		while (++k < j)
-			vertex = vertex->next;
-
-		if (j != -1)
-		{
-			edge = vertex->edges;
-			while (edge)
-			{
-				if (edge->to == i)
-					break ;
-				edge = edge->next;
-			}
-			remove_list_elem(&vertex->edges, edge);
-		}
-		i = j;
-	}
-}
-
-
-
-void	modific_cost_list(t_vertex *vertex)
-{
-	t_edge *edges;
-
-	while (vertex)
-	{
-		edges = vertex->edges;
-		while (edges)
-		{
-			edges->cost = edges->cost
-				- g_dest[edges->to] + g_dest[vertex->room];
-			edges = edges->next;
-		}
-		vertex = vertex->next;
-	}
-}
+// void	remove_way_list(t_list_graph *graph)
+// {
+// 	t_vertex	*vertex;
+// 	t_edge		*edge;
+// 	int			i;
+// 	int			j;
+// 	int 		k;
+//
+// 	// todo: придумать индексам говорящие имена (для vertex то же)
+// 	i = g_end;
+// 	// todo: здесь, вынести -1 в глобальную константу и назвать её (признак отсутствия вершины)
+// 	while (i != -1)
+// 	{
+// 		vertex = graph->vertex;
+// 		j = g_parent[i];
+//
+// 		k = -1;
+// 		while (++k < j)
+// 			vertex = vertex->next;
+//
+// 		if (j != -1)
+// 		{
+// 			edge = vertex->edges;
+// 			while (edge)
+// 			{
+// 				if (edge->to == i)
+// 					break ;
+// 				edge = edge->next;
+// 			}
+// 			remove_list_elem(&vertex->edges, edge);
+// 		}
+// 		i = j;
+// 	}
+// }
+//
+//
+//
+// void	modific_cost_list(t_vertex *vertex)
+// {
+// 	t_edge *edges;
+//
+// 	while (vertex)
+// 	{
+// 		edges = vertex->edges;
+// 		while (edges)
+// 		{
+// 			edges->cost = edges->cost
+// 				- g_dest[edges->to] + g_dest[vertex->room];
+// 			edges = edges->next;
+// 		}
+// 		vertex = vertex->next;
+// 	}
+// }
 
 void	clear_path(t_path *paths)
 {
-	clear_int_array(paths->ways, paths->size);
+	clear_int_array(paths->ways, paths->max_ways);
 	free(paths->steps);
 	free(paths);
 }
@@ -283,6 +283,19 @@ void duplicate_vertices_in_shortest_way(t_graph *graph, int **matrix, int amount
 	}
 }
 
+void clear_graph(t_graph *graph)
+{
+	int i;
+
+	i = -1;
+	while (++i < graph->max_size_matrix)
+		free(graph->adjacency_matrix[i]);
+	free(graph->adjacency_matrix);
+	free(graph->source_vertices);
+	free(graph->duplicated_vertices);
+	free(graph);
+}
+
 void	algo_suurbale(t_list_graph *list_graph)
 {
 	t_path	*paths;
@@ -327,18 +340,15 @@ void	algo_suurbale(t_list_graph *list_graph)
 			break ;
 
 		//add_way_test(paths, graph->source_vertices);
-		add_way(&paths, graph->source_vertices);
+		add_way(paths, graph->source_vertices);
 
-		//print_ways(paths, list_graph->vector->names);
+		sort_paths(paths);
 
-		// заменить двойные указатели
-		sort_paths(&paths); // что-то тут он крутит хуютит
-
-		paths = counter(paths); //  нахуй .. ?
+		counter(paths);
 
 		if (best_choice->final_steps == 0 ||
 				best_choice->final_steps > paths->final_steps)
-			save_best_choice(&best_choice, paths); // двойной указатель убрать можно .. ?
+			save_best_choice(best_choice, paths); // двойной указатель убрать можно .. ?
 
 		// print_matrix(graph, list_graph->vector->names);
 		//remove_way_list(list_graph);
@@ -360,6 +370,7 @@ void	algo_suurbale(t_list_graph *list_graph)
 	}
 
 	//print_ways(paths, list_graph->vector->names);
-	ants_mover(best_choice, list_graph->vector->names);
+		ants_mover(best_choice, list_graph->vector->names);
+	clear_graph(graph);
 	clear_all(paths, best_choice);
 }

@@ -40,7 +40,7 @@ void	clear_edge(t_edge *edge)
 	free(slow);
 }
 
-void	clear_graph(t_list_graph *gr)
+void	clear_graph_list(t_list_graph *gr)
 {
 	int			i;
 	t_vertex	*fast;
