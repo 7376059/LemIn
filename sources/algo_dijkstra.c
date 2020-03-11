@@ -34,7 +34,42 @@ void	g_arrays_preparation(int size)
 	g_dest[g_start] = 0;
 }
 
-void algo_dijkstra(int **matrix, int size_matrix, int *source_vertices)
+// void algo_dijkstra(int **matrix, int size_matrix, int *source_vertices)
+// {
+// 	int	min_dest_vertice;
+// 	int	i;
+// 	int	j;
+//
+// 	g_arrays_preparation(size_matrix);
+// 	i = -1;
+// 	while (++i < size_matrix)
+// 	{
+// 		min_dest_vertice = -1;
+// 		j = -1;
+// 		while (++j < size_matrix)
+// 			if ((g_visit[j] == 0) &&
+// 				(min_dest_vertice == -1 || g_dest[j] < g_dest[min_dest_vertice]))
+// 				min_dest_vertice = j;
+// 		if (g_dest[min_dest_vertice] == g_infinity)
+// 			return ;
+// 		g_visit[min_dest_vertice] = 1;
+// 		j = -1;
+// 		while (++j < size_matrix)
+// 		{
+// 			if (matrix[min_dest_vertice][j] == -1)
+// 				continue ;
+// 			if (g_dest[min_dest_vertice] + matrix[min_dest_vertice][j] < g_dest[j])
+// 			{
+// 				g_dest[j] = g_dest[min_dest_vertice] + matrix[min_dest_vertice][j];
+// 				g_parent[j] = min_dest_vertice;
+// 				//СТРОЧКА НЕ ВЕРНАЯ
+// 				//g_parent[source_vertices[j]] = source_vertices[min_dest_vertice];
+// 			}
+// 		}
+// 	}
+// }
+
+void algo_dijkstra(int **links, int **matrix, int size_matrix, int *source_vertices)
 {
 	int	min_dest_vertice;
 	int	i;
@@ -53,17 +88,13 @@ void algo_dijkstra(int **matrix, int size_matrix, int *source_vertices)
 		if (g_dest[min_dest_vertice] == g_infinity)
 			return ;
 		g_visit[min_dest_vertice] = 1;
-		j = -1;
-		while (++j < size_matrix)
+		j = 0;
+		while (++j <= links[min_dest_vertice][0])
 		{
-			if (matrix[min_dest_vertice][j] == -1)
-				continue ;
-			if (g_dest[min_dest_vertice] + matrix[min_dest_vertice][j] < g_dest[j])
+			if (g_dest[min_dest_vertice] + matrix[min_dest_vertice][links[min_dest_vertice][j]] < g_dest[links[min_dest_vertice][j]])
 			{
-				g_dest[j] = g_dest[min_dest_vertice] + matrix[min_dest_vertice][j];
-				g_parent[j] = min_dest_vertice;
-				//СТРОЧКА НЕ ВЕРНАЯ
-				//g_parent[source_vertices[j]] = source_vertices[min_dest_vertice];
+				g_dest[links[min_dest_vertice][j]] = g_dest[min_dest_vertice] + matrix[min_dest_vertice][links[min_dest_vertice][j]];
+				g_parent[links[min_dest_vertice][j]] = min_dest_vertice;
 			}
 		}
 	}

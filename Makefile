@@ -45,7 +45,7 @@ LIB = $(patsubst %,$(LDIR)/%,$(_LIB))
 all: $(BIN)
 
 $(BIN): $(OBJ)
-	#@make re -C $(LDIR)
+	@make re -C $(LDIR)
 	@gcc -o $@ $^ $(LIB) -I $(IDIR)
 
 $(ODIR)/%.o: $(SDIR)/%.c $(DEPS)
@@ -53,7 +53,7 @@ $(ODIR)/%.o: $(SDIR)/%.c $(DEPS)
 	gcc -c -o $@ $< -I $(IDIR)
 
 clean:
-	#@make clean -C $(LDIR)
+	@make clean -C $(LDIR)
 	@rm -rf $(ODIR)
 
 fclean: clean

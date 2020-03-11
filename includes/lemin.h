@@ -34,6 +34,7 @@ typedef struct s_graph
 
 	int	*duplicated_vertices;
 
+	int **links_in_matrix;
 	int **adjacency_matrix;
 }	t_graph;
 
@@ -94,7 +95,7 @@ void	print_way(char **names);
 
 void	algo_suurbale(t_list_graph *graph);
 void	algo_dijkstra_list(t_list_graph *graph); // delete
-void  algo_dijkstra(int **matrix, int size_matrix, int *source_vertices);
+void  algo_dijkstra(int **links, int **matrix, int size_matrix, int *source_vertices);
 
 t_vector *realloc_vector(t_vector *temp, char *line);
 t_vector *vector_push(t_vector *temp, char *line);

@@ -154,10 +154,18 @@ t_graph	*init_graph(t_list_graph *list_graph)
 	graph->adjacency_matrix =
 		(int**)malloc(sizeof(int*) * graph->max_size_matrix);
 
+	graph->links_in_matrix =
+		(int**)malloc(sizeof(int*) * graph->max_size_matrix);
+
+
 	i = -1;
 	while (++i < graph->max_size_matrix)
+	{
 		graph->adjacency_matrix[i] =
 			(int*)malloc(sizeof(int) * graph->max_size_matrix);
+		graph->links_in_matrix[i] =
+			(int*)malloc(sizeof(int) * graph->max_size_matrix);
+	}
 
 	int j;
 	i = -1;
@@ -165,16 +173,22 @@ t_graph	*init_graph(t_list_graph *list_graph)
 	{
 		j = -1;
 		while (++j < graph->max_size_matrix)
+		{
 			graph->adjacency_matrix[i][j] = -1;
+			graph->links_in_matrix[i][j] = 0;
+		}
 	}
 
 	vertex = list_graph->vertex;
 	while (vertex)
 	{
+		i = 1;
 		edges = vertex->edges;
 		while (edges)
 		{
 			graph->adjacency_matrix[vertex->room][edges->to] = edges->cost;
+			graph->links_in_matrix[vertex->room][0]++;
+			graph->links_in_matrix[vertex->room][i++] = edges->to;
 			edges = edges->next;
 		}
 		vertex = vertex->next;
@@ -204,7 +218,20 @@ void print_matrix(t_graph *graph, char **names)
 	printf("\n");
 }
 
-void remove_shortest_way(int **matrix, int size_matrix)
+void remove_link(int **links, int v, int to)
+{
+	int i;
+
+	i = 0;
+	while (++i <= links[v][0])
+		if (links[v][i] == to)
+			break ;
+	if (i != links[v][0])
+		links[v][i] = links[v][links[v][0]];
+	links[v][0]--;
+}
+
+void remove_shortest_way(int **links, int **matrix, int size_matrix)
 {
 	int	to;
 	int v;
@@ -214,13 +241,33 @@ void remove_shortest_way(int **matrix, int size_matrix)
 	while (v != -1)
 	{
 		matrix[v][to] = -1;
+		remove_link(links, v, to);
 		matrix[to][v] = 0;
 		to = v;
 		v = g_parent[to];
 	}
 }
 
-void modify_and_remove_edges(int **matrix, int size_matrix)
+// void modify_and_remove_edges(int **links, int **matrix, int size_matrix)
+// {
+// 	int i;
+// 	int j;
+//
+// 	i = -1;
+// 	while (++i < size_matrix)
+// 	{
+// 		j = -1;
+// 		while (++j < size_matrix)
+// 		{
+// 			if (matrix[i][j] == -1)
+// 				continue ;
+// 			matrix[i][j] = matrix[i][j] - g_dest[j] + g_dest[i];
+// 		}
+// 	}
+// 	remove_shortest_way(matrix, size_matrix);
+// }
+
+void modify_and_remove_edges(int **links, int **matrix, int size_matrix)
 {
 	int i;
 	int j;
@@ -228,18 +275,14 @@ void modify_and_remove_edges(int **matrix, int size_matrix)
 	i = -1;
 	while (++i < size_matrix)
 	{
-		j = -1;
-		while (++j < size_matrix)
-		{
-			if (matrix[i][j] == -1)
-				continue ;
-			matrix[i][j] = matrix[i][j] - g_dest[j] + g_dest[i];
-		}
+		j = 0;
+		while (++j <= links[i][0])
+			matrix[i][links[i][j]] = matrix[i][links[i][j]] - g_dest[links[i][j]] + g_dest[i];
 	}
-	remove_shortest_way(matrix, size_matrix);
+	remove_shortest_way(links, matrix, size_matrix);
 }
 
-void duplicate_vertices_in_shortest_way(t_graph *graph, int **matrix, int amount_vertices)
+void duplicate_vertices_in_shortest_way(t_graph *graph, int **links, int **matrix, int amount_vertices)
 {
 	int duplicate_vertice;
 	int	previous_vertice;
@@ -261,8 +304,14 @@ void duplicate_vertices_in_shortest_way(t_graph *graph, int **matrix, int amount
 			graph->duplicated_vertices[duplicate_vertice] = 1;
 
 			matrix[graph->elems_in_matrix][next_vertice] = matrix[duplicate_vertice][next_vertice];
+			links[graph->elems_in_matrix][0] = 1;
+			links[graph->elems_in_matrix][1] = next_vertice;
 			matrix[duplicate_vertice][next_vertice] = -1;
+			remove_link(links, duplicate_vertice, next_vertice);
 			matrix[duplicate_vertice][graph->elems_in_matrix] = 0;
+			links[duplicate_vertice][0]++;
+			links[duplicate_vertice][links[duplicate_vertice][0]] = graph->elems_in_matrix;
+
 
 			i = -1;
 			while (++i < amount_vertices)
@@ -270,7 +319,10 @@ void duplicate_vertices_in_shortest_way(t_graph *graph, int **matrix, int amount
 				if (matrix[i][duplicate_vertice] == -1 || i == previous_vertice)
 					continue ;
 				matrix[i][graph->elems_in_matrix] = matrix[i][duplicate_vertice];
+				links[i][0]++;
+				links[i][links[i][0]] = graph->elems_in_matrix;
 				matrix[i][duplicate_vertice] = -1;
+				remove_link(links, i, duplicate_vertice);
 			}
 
 			graph->source_vertices[graph->elems_in_matrix] = duplicate_vertice;
@@ -289,11 +341,27 @@ void clear_graph(t_graph *graph)
 
 	i = -1;
 	while (++i < graph->max_size_matrix)
+	{
 		free(graph->adjacency_matrix[i]);
+		free(graph->links_in_matrix[i]);
+	}
 	free(graph->adjacency_matrix);
+	free(graph->links_in_matrix);
 	free(graph->source_vertices);
 	free(graph->duplicated_vertices);
 	free(graph);
+}
+
+void print_links_matrix(t_graph *graph)
+{
+	for (int i = 0; i < graph->amount_vertices; i++)
+	{
+		printf("[%d] ", graph->links_in_matrix[i][0]);
+		for (int j = 1; j <= graph->links_in_matrix[i][0]; j++)
+			printf("%d ", graph->links_in_matrix[i][j]);
+		printf("\n");
+	}
+	printf("\n");
 }
 
 void	algo_suurbale(t_list_graph *list_graph)
@@ -303,6 +371,9 @@ void	algo_suurbale(t_list_graph *list_graph)
 	t_graph	*graph;
 
 	graph = init_graph(list_graph);
+
+	// print_matrix(graph, list_graph->vector->names);
+	// print_links_matrix(graph);
 
 	init_path(&best_choice);
 	init_path(&paths);
@@ -314,7 +385,7 @@ void	algo_suurbale(t_list_graph *list_graph)
 
 	while (1)
 	{
-		algo_dijkstra(graph->adjacency_matrix, graph->elems_in_matrix, graph->source_vertices);
+		algo_dijkstra(graph->links_in_matrix, graph->adjacency_matrix, graph->elems_in_matrix, graph->source_vertices);
 
 		// for (int i = g_end; i != -1;)
 		// {
@@ -353,10 +424,14 @@ void	algo_suurbale(t_list_graph *list_graph)
 		// print_matrix(graph, list_graph->vector->names);
 		//remove_way_list(list_graph);
 
-	  modify_and_remove_edges(graph->adjacency_matrix, graph->elems_in_matrix);
 		// print_matrix(graph, list_graph->vector->names);
+		// print_links_matrix(graph);
+	  modify_and_remove_edges(graph->links_in_matrix, graph->adjacency_matrix, graph->elems_in_matrix);
+		// print_matrix(graph, list_graph->vector->names);
+		// print_links_matrix(graph);
 
-		duplicate_vertices_in_shortest_way(graph, graph->adjacency_matrix, graph->amount_vertices);
+
+		duplicate_vertices_in_shortest_way(graph, graph->links_in_matrix, graph->adjacency_matrix, graph->amount_vertices);
 		//modific_cost_list(list_graph->vertex);
 		// print_matrix(graph, list_graph->vector->names);
 
