@@ -6,7 +6,7 @@
 #    By: efriesen <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/10/12 21:21:49 by efriesen          #+#    #+#              #
-#    Updated: 2020/02/22 19:19:38 by efriesen         ###   ########.fr        #
+#    Updated: 2020/03/12 23:47:20 by efriesen         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -68,6 +68,7 @@ $(NAME):
 	@ranlib $(NAME)
 
 clean:
+	@make clean -C ft_printf
 	@rm -f $(OBJ)
 
 fclean: clean

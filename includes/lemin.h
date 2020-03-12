@@ -6,7 +6,7 @@
 /*   By: dgrady <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/18 19:18:10 by dgrady            #+#    #+#             */
-/*   Updated: 2020/03/12 21:35:05 by dgrady           ###   ########.fr       */
+/*   Updated: 2020/03/12 23:45:19 by efriesen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
 int g_ants;
 int g_start;
 int g_end;
+
+int g_print_paths;
 
 int g_infinity;
 
