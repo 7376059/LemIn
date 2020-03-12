@@ -5,7 +5,7 @@ t_vector	*init_vector()
 	t_vector *rez;
 
 	rez = (t_vector*)malloc(sizeof(t_vector));
-	rez->size = 1000000; //  проеб памяти
+	rez->size = 2; //  проеб памяти
 	rez->elems = 0;
 	rez->names = (char**)malloc(sizeof(char*) * rez->size);
 	return(rez);
@@ -25,6 +25,8 @@ t_vector *realloc_vector(t_vector *temp, char *line)
 	while (++i < temp->elems)
 		new->names[i] = temp->names[i];
 	new = vector_push(new, line);
+	free(temp->names);
+	free(temp);
 	return (new);
 }
 
@@ -39,3 +41,4 @@ t_vector *vector_push(t_vector *temp, char *line)
 		temp = realloc_vector(temp, line);
 	return (temp);
 }
+
