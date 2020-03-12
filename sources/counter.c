@@ -6,7 +6,7 @@
 /*   By: dgrady <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/23 16:50:06 by dgrady            #+#    #+#             */
-/*   Updated: 2020/02/24 17:11:43 by dgrady           ###   ########.fr       */
+/*   Updated: 2020/03/12 21:34:27 by dgrady           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,9 +62,9 @@ void counter(t_path *path)
 	path->steps = (int*)malloc(sizeof(int) * 1);
 	path->steps[0] = g_ants;
 	path->step_elems = 1;
-	path->final_steps = g_ants + path->ways[0][0];
-	if (path->step_elems == 1 && path->ways[0][0] == 1)
-		        path->final_steps -= 1;
+	path->final_steps = g_ants + path->ways[0][0] - 1;
+	//if (path->step_elems == 1 && path->ways[0][0] == 1)
+		        //path->final_steps -= 1;
 }
 
 void balanc_path(t_path *path)
