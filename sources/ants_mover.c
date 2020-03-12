@@ -6,7 +6,7 @@
 /*   By: efriesen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/17 16:47:02 by efriesen          #+#    #+#             */
-/*   Updated: 2020/02/24 17:08:06 by dgrady           ###   ########.fr       */
+/*   Updated: 2020/03/12 21:51:26 by dgrady           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ int **create_array_of_ants(int *steps, int size)
 				break ;
 		}
 		i++;
+		if(check != 0) 
 		while (steps[check] == i)
 			check--;
 	}
