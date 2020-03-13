@@ -110,28 +110,6 @@ void	clear_path(t_path *paths)
 	free(paths);
 }
 
-void	clear_all(t_path *path, t_path *best)
-{
-	clear_path(best);
-	clear_path(path);
-
-	free(g_dest);
-	free(g_parent);
-	free(g_visit);
-}
-
-void print_ways(t_path *path, char **names)
-{
-	for (int i = 0; i < path->size; i++)
-	{
-			printf("[%d] : ", path->ways[i][0]);
-			for (int j = 1; j <= path->ways[i][0]; j++)
-				printf("%s ", names[path->ways[i][j]]);
-			printf("\n");
-	}
-	printf("\n");
-}
-
 t_graph	*init_graph(t_list_graph *list_graph)
 {
 	t_vertex	*vertex;
@@ -197,27 +175,6 @@ t_graph	*init_graph(t_list_graph *list_graph)
 	return (graph);
 }
 
-void print_matrix(t_graph *graph, char **names)
-{
-	printf("     ");
-	for (int i = 0; i < graph->elems_in_matrix; i++)
-		printf("[%s] ", names[graph->source_vertices[i]]);
-	printf("\n");
-	for (int i = 0; i < graph->elems_in_matrix; i++)
-	{
-		printf("[%s] ", names[graph->source_vertices[i]]);
-		for (int j = 0; j < graph->elems_in_matrix; j++)
-		{
-			if (graph->adjacency_matrix[i][j] == -1)
-				printf("%3d ", graph->adjacency_matrix[i][j]);
-			else
-				printf("[%d] ", graph->adjacency_matrix[i][j]);
-		}
-		printf("\n");
-	}
-	printf("\n");
-}
-
 void remove_link(int **links, int v, int to)
 {
 	int i;
@@ -248,25 +205,6 @@ void remove_shortest_way(int **links, int **matrix, int size_matrix)
 	}
 }
 
-// void modify_and_remove_edges(int **links, int **matrix, int size_matrix)
-// {
-// 	int i;
-// 	int j;
-//
-// 	i = -1;
-// 	while (++i < size_matrix)
-// 	{
-// 		j = -1;
-// 		while (++j < size_matrix)
-// 		{
-// 			if (matrix[i][j] == -1)
-// 				continue ;
-// 			matrix[i][j] = matrix[i][j] - g_dest[j] + g_dest[i];
-// 		}
-// 	}
-// 	remove_shortest_way(matrix, size_matrix);
-// }
-
 void modify_and_remove_edges(int **links, int **matrix, int size_matrix)
 {
 	int i;
@@ -277,7 +215,8 @@ void modify_and_remove_edges(int **links, int **matrix, int size_matrix)
 	{
 		j = 0;
 		while (++j <= links[i][0])
-			matrix[i][links[i][j]] = matrix[i][links[i][j]] - g_dest[links[i][j]] + g_dest[i];
+			matrix[i][links[i][j]] =
+				matrix[i][links[i][j]] - g_dest[links[i][j]] + g_dest[i];
 	}
 	remove_shortest_way(links, matrix, size_matrix);
 }
@@ -352,28 +291,37 @@ void clear_graph(t_graph *graph)
 	free(graph);
 }
 
-void print_links_matrix(t_graph *graph)
+void print_found_paths(t_path *paths, int used_path, char **names)
 {
-	for (int i = 0; i < graph->amount_vertices; i++)
+	int i;
+	int j;
+
+	ft_printf("Printing found paths:\n\n");
+	i = -1;
+	while (++i < paths->size)
 	{
-		printf("[%d] ", graph->links_in_matrix[i][0]);
-		for (int j = 1; j <= graph->links_in_matrix[i][0]; j++)
-			printf("%d ", graph->links_in_matrix[i][j]);
-		printf("\n");
+		ft_printf("[%d] : %s-", paths->ways[i][0], names[g_start]);
+		j = 0;
+		while (++j <= paths->ways[i][0])
+		{
+			ft_printf("%s", names[paths->ways[i][j]]);
+			if (j != paths->ways[i][0])
+				ft_printf("-");
+		}
+		ft_printf("\n");
 	}
-	printf("\n");
+	ft_printf("\nfound paths: %d\n", paths->size);
+	ft_printf("used paths:  %d\n", used_path);
 }
 
-void	algo_suurbale(t_list_graph *list_graph)
+void invalid_graph(void)
 {
-	t_path	*paths;
-	t_path	*best_choice;
-	t_graph	*graph;
+	ft_printf("ERROR\n");
+	exit(0);
+}
 
-	graph = init_graph(list_graph);
-	init_path(&best_choice);
-	init_path(&paths);
-
+void algo_suurbale(t_graph *graph, t_path *paths, t_path *best_choice)
+{
 	while (1)
 	{
 		algo_dijkstra(graph->links_in_matrix, graph->adjacency_matrix,
@@ -386,12 +334,36 @@ void	algo_suurbale(t_list_graph *list_graph)
 		if (best_choice->final_steps == 0 ||
 				best_choice->final_steps > paths->final_steps)
 			save_best_choice(best_choice, paths);
-	  modify_and_remove_edges(graph->links_in_matrix, graph->adjacency_matrix,
+		modify_and_remove_edges(graph->links_in_matrix, graph->adjacency_matrix,
 			graph->elems_in_matrix);
 		duplicate_vertices_in_shortest_way(graph, graph->links_in_matrix,
 			graph->adjacency_matrix, graph->amount_vertices);
 	}
-	ants_mover(best_choice, list_graph->vector->names);
+}
+
+void	algorithm_suurbale(t_graph *graph, char **vertices_names, char *graph_output)
+{
+	t_path	*paths;
+	t_path	*best_choice;
+
+	init_path(&best_choice);
+	init_path(&paths);
+
+	algo_suurbale(graph, paths, best_choice);
+
+	if (!paths->size)
+		invalid_graph();
+
+	if (g_print_paths)
+		print_found_paths(paths, best_choice->step_elems, vertices_names);
+	else
+		ants_mover(best_choice, vertices_names, graph_output);
+
 	clear_graph(graph);
-	clear_all(paths, best_choice);
+	clear_path(paths);
+	clear_path(best_choice);
+
+	free(g_dest);
+	free(g_parent);
+	free(g_visit);
 }

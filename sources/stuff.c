@@ -19,6 +19,7 @@ t_list_graph	*init_list_graph(void)
 	rez = (t_list_graph*)malloc(sizeof(t_list_graph));
 	rez->vector = init_vector();
 	rez->vertex = NULL;
+	rez->graph_output = NULL;
 	return (rez);
 }
 

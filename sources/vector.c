@@ -41,4 +41,3 @@ t_vector *vector_push(t_vector *temp, char *line)
 		temp = realloc_vector(temp, line);
 	return (temp);
 }
-

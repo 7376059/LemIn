@@ -94,6 +94,37 @@ t_list_graph	*norm_parcer(t_list_graph *gr, char *line)
 	return (gr);
 }
 
+char *ft_strjoin_slash_n(char *s1, char *s2)
+{
+	char	*str;
+	int		i;
+	int		j;
+
+	str = (char*)malloc(ft_strlen(s1) + ft_strlen(s2) + sizeof(char) * 2);
+
+	//printf("s1: %s\n", s1);
+	//printf("s2: %s\n\n", s2);
+
+	j = 0;
+	if (s1)
+	{
+		i = 0;
+		while (s1[i])
+			str[j++] = s1[i++];
+		str[j++] = '\n';
+		free(s1);
+	//printf("%d\n", i);
+	}
+	i = 0;
+	while (s2[i])
+		str[j++] = s2[i++];
+	str[j] = '\0';
+
+	//ft_printf("\n\n%s\n\n", str);
+
+  return (str);
+}
+
 t_list_graph	*start_parser(t_list_graph *gr)
 {
 	char	*line;
@@ -102,11 +133,11 @@ t_list_graph	*start_parser(t_list_graph *gr)
 	if (!(get_next_line(0, &line)))
 			throw_error(gr);
 	g_ants = get_ants(line, gr);
-	ft_printf("%s\n", line);
+	//gr->graph_output = ft_strjoin_slash_n(gr->graph_output, line);
 	free(line);
 	while ((get_next_line(0, &line) == 1))
 	{
-		ft_printf("%s\n", line);
+		//gr->graph_output = ft_strjoin_slash_n(gr->graph_output, line);
 		if (ft_strcmp(line, "##start") == 0)
 			g_start = gr->vector->elems;
 		else if (ft_strcmp(line, "##end") == 0)

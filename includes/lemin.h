@@ -79,24 +79,26 @@ typedef struct s_vertex
 
 typedef struct s_list_graph
 {
+	char *graph_output;
 	struct s_vertex	*vertex;
 	struct s_vector *vector;
 }				t_list_graph;
 
-void	ants_mover(t_path *path, char **names);
+void	ants_mover(t_path *path, char **names, char *graph_output);
 void	save_best_choice(t_path *best_choice, t_path *path);
 void    add_way(t_path *path, int *source_vertices);
 void    init_path(t_path **paths);
 void    sort_paths(t_path *path);
 void    detect_common_edge(t_path **path);
 
+t_graph	*init_graph(t_list_graph *graph);
+
 void detect_crossing_paths(t_path *path);
 
 void    print_graph(t_list_graph *gr);
 void	print_way(char **names);
 
-void	algo_suurbale(t_list_graph *graph);
-void	algo_dijkstra_list(t_list_graph *graph); // delete
+void	algorithm_suurbale(t_graph *graph, char **vertices_names, char *graph_output);
 void  algo_dijkstra(int **links, int **matrix, int size_matrix, int *source_vertices);
 
 t_vector *realloc_vector(t_vector *temp, char *line);

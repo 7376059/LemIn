@@ -48,7 +48,7 @@ int **create_array_of_ants(int *steps, int size)
 				break ;
 		}
 		i++;
-		if(check != 0) 
+		if(check != 0)
 		while (steps[check] == i)
 			check--;
 	}
@@ -66,12 +66,27 @@ void	clear_int_array(int **arr, int size_ways)
 	free(arr);
 }
 
-void    ants_mover(t_path *paths, char **names)
+void crutch_for_path_in_one_edge(t_path *paths, char **names)
+{
+	int i;
+
+	i = 0;
+	while (++i <= paths->steps[0])
+		ft_printf("L%d-%s ", i, names[g_end]);
+	ft_printf("\n");
+}
+
+void    ants_mover(t_path *paths, char **names, char *graph_output)
 {
 	int **ants;
 	int current_step;
 	int i;
 	int j;
+
+	//ft_printf("%s\n\n", graph_output);
+
+	if (paths->final_steps == 1)
+		return (crutch_for_path_in_one_edge(paths, names));
 
 	ants = create_array_of_ants(paths->steps, paths->step_elems);
 

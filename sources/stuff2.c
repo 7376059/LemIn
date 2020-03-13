@@ -64,6 +64,7 @@ void	clear_graph_list(t_list_graph *gr)
 	}
 	clear_edge(slow->edges);
 	free(slow);
+	free(gr->graph_output);
 	free(gr);
 }
 
