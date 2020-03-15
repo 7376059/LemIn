@@ -6,7 +6,7 @@
 /*   By: efriesen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/03 21:44:17 by efriesen          #+#    #+#             */
-/*   Updated: 2020/02/23 16:24:13 by efriesen         ###   ########.fr       */
+/*   Updated: 2020/03/15 18:03:11 by efriesen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,7 @@ int		get_min_dest_vertice(int size_matrix)
 		return (min_dest_vertice);
 }
 
-void algo_dijkstra(int **links, int **matrix,
-		int size_matrix, int *source_vertices)
+void	algo_dijkstra(int **links, int **matrix, int size_matrix)
 {
 	int	min_dest_vertice;
 	int	i;

@@ -51,7 +51,6 @@ t_list_graph	*get_edge(t_list_graph *gr, char **line)
 	int			first;
 	int			second;
 	int			i;
-	int			j;
 	t_vertex	*temp;
 
 	temp = gr->vertex;
@@ -97,7 +96,6 @@ t_list_graph	*norm_parcer(t_list_graph *gr, char *line)
 t_list_graph	*start_parser(t_list_graph *gr)
 {
 	char	*line;
-	char	a;
 
 	if (!(get_next_line(0, &line)))
 		throw_error(gr);

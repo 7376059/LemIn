@@ -6,7 +6,7 @@
 /*   By: dgrady <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/15 18:57:31 by dgrady            #+#    #+#             */
-/*   Updated: 2020/03/15 19:04:11 by dgrady           ###   ########.fr       */
+/*   Updated: 2020/03/15 19:21:02 by efriesen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,32 @@ int		get_first(int ants, int way)
 	if (first < 0)
 		invalid_graph();
 	return (first);
+}
+
+int		**crutch_create_array(int check, int *steps, int **rez)
+{
+	int i;
+	int j;
+	int ants;
+
+	i = 0;
+	ants = 1;
+	while (ants <= g_ants)
+	{
+		j = -1;
+		while (++j <= check)
+		{
+			rez[j][i] = ants;
+			ants++;
+			if (ants > g_ants)
+				break ;
+		}
+		i++;
+		if (check != 0)
+			while (steps[check] == i)
+				check--;
+	}
+	return (rez);
 }
 
 char	*ft_strjoin_slash_n(char *s1, char *s2)

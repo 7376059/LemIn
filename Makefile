@@ -6,7 +6,7 @@
 #    By: efriesen <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/02/22 16:49:55 by efriesen          #+#    #+#              #
-#    Updated: 2020/03/15 13:25:50 by efriesen         ###   ########.fr        #
+#    Updated: 2020/03/15 19:29:45 by efriesen         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,9 @@ _SRC =	algo_suurbale.c\
 		parser.c\
 		stuff.c\
 		stuff2.c\
+		stuff3.c\
 		free_functions.c\
+		suurbale_functions.c\
 		vector.c
 
 SDIR = sources
@@ -47,11 +49,11 @@ all: $(BIN)
 
 $(BIN): $(OBJ)
 	@make re -C $(LDIR)
-	@gcc -o $@ $^ $(LIB) -I $(IDIR)
+	@gcc $(GFLAGS) -o $@ $^ $(LIB) -I $(IDIR)
 
 $(ODIR)/%.o: $(SDIR)/%.c $(DEPS)
 	@mkdir -p objects
-	gcc -c -o $@ $< -I $(IDIR)
+	gcc $(GFLAGS) -c -o $@ $< -I $(IDIR)
 
 clean:
 	@make clean -C $(LDIR)

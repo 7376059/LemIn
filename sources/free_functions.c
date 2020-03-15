@@ -6,7 +6,7 @@
 /*   By: efriesen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/14 12:44:45 by efriesen          #+#    #+#             */
-/*   Updated: 2020/03/14 12:44:46 by efriesen         ###   ########.fr       */
+/*   Updated: 2020/03/15 18:04:23 by efriesen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	clear_path(t_path *paths)
 	free(paths);
 }
 
-void clear_graph(t_graph *graph)
+void	clear_graph(t_graph *graph)
 {
 	int i;
 
