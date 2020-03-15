@@ -84,6 +84,11 @@ typedef struct s_list_graph
 	struct s_vector *vector;
 }				t_list_graph;
 
+void invalid_graph(void);
+
+void	clear_path(t_path *paths);
+void clear_graph(t_graph *graph);
+
 void	ants_mover(t_path *path, char **names, char *graph_output);
 void	save_best_choice(t_path *best_choice, t_path *path);
 void    add_way(t_path *path, int *source_vertices);
@@ -95,8 +100,10 @@ t_graph	*init_graph(t_list_graph *graph);
 
 void detect_crossing_paths(t_path *path);
 
-void    print_graph(t_list_graph *gr);
-void	print_way(char **names);
+void    print_graph(t_list_graph *gr); // che ?
+
+void print_paths(t_path *paths, t_path *best, char **names);
+
 
 void	algorithm_suurbale(t_graph *graph, char **vertices_names, char *graph_output);
 void  algo_dijkstra(int **links, int **matrix, int size_matrix, int *source_vertices);
