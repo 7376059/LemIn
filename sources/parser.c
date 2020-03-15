@@ -6,7 +6,7 @@
 /*   By: dgrady <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/19 16:01:51 by dgrady            #+#    #+#             */
-/*   Updated: 2020/02/23 18:04:00 by dgrady           ###   ########.fr       */
+/*   Updated: 2020/03/15 19:02:33 by dgrady           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ t_list_graph	*get_name(t_list_graph *gr, char **line)
 	return (gr);
 }
 
-int		validate_edge(t_list_graph *gr, char **name)
+int				validate_edge(t_list_graph *gr, char **name)
 {
 	int	i;
 	int flag;
@@ -94,44 +94,13 @@ t_list_graph	*norm_parcer(t_list_graph *gr, char *line)
 	return (gr);
 }
 
-char *ft_strjoin_slash_n(char *s1, char *s2)
-{
-	char	*str;
-	int		i;
-	int		j;
-
-	str = (char*)malloc(ft_strlen(s1) + ft_strlen(s2) + sizeof(char) * 2);
-
-	//printf("s1: %s\n", s1);
-	//printf("s2: %s\n\n", s2);
-
-	j = 0;
-	if (s1)
-	{
-		i = 0;
-		while (s1[i])
-			str[j++] = s1[i++];
-		str[j++] = '\n';
-		free(s1);
-	//printf("%d\n", i);
-	}
-	i = 0;
-	while (s2[i])
-		str[j++] = s2[i++];
-	str[j] = '\0';
-
-	//ft_printf("\n\n%s\n\n", str);
-
-  return (str);
-}
-
 t_list_graph	*start_parser(t_list_graph *gr)
 {
 	char	*line;
 	char	a;
 
 	if (!(get_next_line(0, &line)))
-			throw_error(gr);
+		throw_error(gr);
 	g_ants = get_ants(line, gr);
 	gr->graph_output = ft_strjoin_slash_n(gr->graph_output, line);
 	free(line);

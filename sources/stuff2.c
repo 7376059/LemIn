@@ -6,13 +6,13 @@
 /*   By: dgrady <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/23 18:00:38 by dgrady            #+#    #+#             */
-/*   Updated: 2020/02/23 18:10:01 by dgrady           ###   ########.fr       */
+/*   Updated: 2020/03/15 19:03:57 by dgrady           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lemin.h"
 
-void invalid_graph(void)
+void	invalid_graph(void)
 {
 	ft_printf("ERROR\n");
 	exit(0);

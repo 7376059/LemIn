@@ -6,7 +6,7 @@
 /*   By: dgrady <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/23 16:39:27 by dgrady            #+#    #+#             */
-/*   Updated: 2020/03/12 21:43:28 by dgrady           ###   ########.fr       */
+/*   Updated: 2020/03/15 18:51:24 by dgrady           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ int		*min_gap(int *mas, int *rez, int size)
 	return (norm_balanc(mas, size));
 }
 
-void balancer(t_path *path)
+void	balancer(t_path *path)
 {
 	int *rez;
 

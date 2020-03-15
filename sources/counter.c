@@ -6,7 +6,7 @@
 /*   By: dgrady <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/23 16:50:06 by dgrady            #+#    #+#             */
-/*   Updated: 2020/03/12 21:34:27 by dgrady           ###   ########.fr       */
+/*   Updated: 2020/03/15 19:06:07 by dgrady           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,14 +53,15 @@ int		set_koef(void)
 	return (9);
 }
 
-void counter(t_path *path)
+void	counter(t_path *path)
 {
+	path->step_elems = 0;
 	if (path->ways[0][0] == 1)
 	{
-	    path->final_steps = 1;
-	    return ;
+		path->final_steps = 1;
+		return ;
 	}
-	if(path->steps)
+	if (path->steps)
 		free(path->steps);
 	if (path->size > 1)
 		return (counter2(path));
@@ -68,11 +69,9 @@ void counter(t_path *path)
 	path->steps[0] = g_ants;
 	path->step_elems = 1;
 	path->final_steps = g_ants + path->ways[0][0] - 1;
-	//if (path->step_elems == 1 && path->ways[0][0] == 1)
-		        //path->final_steps -= 1;
 }
 
-void balanc_path(t_path *path)
+void	balanc_path(t_path *path)
 {
 	balancer(path);
 	path->final_steps = path->steps[0] + path->ways[0][0] - 1;
@@ -81,7 +80,7 @@ void balanc_path(t_path *path)
 		path->final_steps -= 1;
 }
 
-void counter2(t_path *path)
+void	counter2(t_path *path)
 {
 	int ants;
 	int first;
@@ -94,7 +93,7 @@ void counter2(t_path *path)
 	while (ants > 0)
 	{
 		count = 1;
-		first = ants + path->ways[0][0] - 1;
+		first = get_first(ants, path->ways[0][0]);
 		while (first > path->ways[count][0])
 		{
 			temp = (first - path->ways[count][0]) / count;
