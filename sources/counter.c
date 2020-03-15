@@ -55,6 +55,11 @@ int		set_koef(void)
 
 void counter(t_path *path)
 {
+	if (path->ways[0][0] == 1)
+	{
+	    path->final_steps = 1;
+	    return ;
+	}
 	if(path->steps)
 		free(path->steps);
 	if (path->size > 1)

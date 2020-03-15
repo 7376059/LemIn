@@ -12,6 +12,12 @@
 
 #include "lemin.h"
 
+void invalid_graph(void)
+{
+	ft_printf("ERROR\n");
+	exit(0);
+}
+
 void	clear_mas(char **mas)
 {
 	int i;

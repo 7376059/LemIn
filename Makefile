@@ -6,7 +6,7 @@
 #    By: efriesen <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/02/22 16:49:55 by efriesen          #+#    #+#              #
-#    Updated: 2020/03/08 12:30:18 by efriesen         ###   ########.fr        #
+#    Updated: 2020/03/15 13:25:50 by efriesen         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,6 +25,7 @@ _SRC =	algo_suurbale.c\
 		parser.c\
 		stuff.c\
 		stuff2.c\
+		free_functions.c\
 		vector.c
 
 SDIR = sources
@@ -45,7 +46,7 @@ LIB = $(patsubst %,$(LDIR)/%,$(_LIB))
 all: $(BIN)
 
 $(BIN): $(OBJ)
-	#@make re -C $(LDIR)
+	@make re -C $(LDIR)
 	@gcc -o $@ $^ $(LIB) -I $(IDIR)
 
 $(ODIR)/%.o: $(SDIR)/%.c $(DEPS)
@@ -53,7 +54,7 @@ $(ODIR)/%.o: $(SDIR)/%.c $(DEPS)
 	gcc -c -o $@ $< -I $(IDIR)
 
 clean:
-	#@make clean -C $(LDIR)
+	@make clean -C $(LDIR)
 	@rm -rf $(ODIR)
 
 fclean: clean

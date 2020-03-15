@@ -56,24 +56,58 @@ int **create_array_of_ants(int *steps, int size)
 
 }
 
-void	clear_int_array(int **arr, int size_ways)
-{
-	int i;
-
-	i = -1;
-	while (++i < size_ways)
-		free(arr[i]);
-	free(arr);
-}
-
 void crutch_for_path_in_one_edge(t_path *paths, char **names)
 {
 	int i;
 
 	i = 0;
-	while (++i <= paths->steps[0])
+	while (++i <= g_ants)
 		ft_printf("L%d-%s ", i, names[g_end]);
 	ft_printf("\n");
+}
+
+void print_used_paths(t_path *best, char **names)
+{
+	int i;
+	int j;
+
+	ft_printf("\n used paths: %d\n\n", best->size);
+	i = -1;
+	while (++i < best->size)
+	{
+		ft_printf("[%d] : %s-", best->ways[i][0], names[g_start]);
+		j = 0;
+		while (++j <= best->ways[i][0])
+		{
+			ft_printf("%s", names[best->ways[i][j]]);
+			if (j != best->ways[i][0])
+				ft_printf("-");
+		}
+		ft_printf("\n");
+	}
+}
+
+void print_paths(t_path *paths, t_path *best, char **names)
+{
+	int i;
+	int j;
+
+	ft_printf("-xxx: printing found paths\n\n");
+	ft_printf(" found node-disjoints paths: %d\n\n", paths->size);
+	i = -1;
+	while (++i < paths->size)
+	{
+		ft_printf("[%d] : %s-", paths->ways[i][0], names[g_start]);
+		j = 0;
+		while (++j <= paths->ways[i][0])
+		{
+			ft_printf("%s", names[paths->ways[i][j]]);
+			if (j != paths->ways[i][0])
+				ft_printf("-");
+		}
+		ft_printf("\n");
+	}
+	print_used_paths(best, names);
 }
 
 void    ants_mover(t_path *paths, char **names, char *graph_output)
@@ -83,7 +117,7 @@ void    ants_mover(t_path *paths, char **names, char *graph_output)
 	int i;
 	int j;
 
-	//ft_printf("%s\n\n", graph_output);
+	ft_printf("%s\n\n", graph_output);
 
 	if (paths->final_steps == 1)
 		return (crutch_for_path_in_one_edge(paths, names));
