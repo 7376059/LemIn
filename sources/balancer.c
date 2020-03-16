@@ -6,7 +6,7 @@
 /*   By: dgrady <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/23 16:39:27 by dgrady            #+#    #+#             */
-/*   Updated: 2020/03/15 22:55:29 by dgrady           ###   ########.fr       */
+/*   Updated: 2020/03/16 18:16:09 by dgrady           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,22 +33,21 @@ int		*norm_balanc(int *mas, int size)
 	temp = 0;
 	while (++i < size)
 		temp += mas[i];
-		temp = g_ants - temp;
-		if (temp < 0)
+	temp = g_ants - temp;
+	if (temp < 0)
+	{
+		while (temp != 0)
 		{
-			while(temp != 0)
-			{
-				mas[size - 1]--;
-				temp++;
-				size--;
-			}
-
-		}	
-		else
-		{
-			while (--temp > -1)
-				mas[temp]++;
+			mas[size - 1]--;
+			temp++;
+			size--;
 		}
+	}
+	else
+	{
+		while (--temp > -1)
+			mas[temp]++;
+	}
 	return (mas);
 }
 
