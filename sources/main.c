@@ -6,7 +6,7 @@
 /*   By: dgrady <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/18 19:27:51 by dgrady            #+#    #+#             */
-/*   Updated: 2020/03/15 18:57:01 by efriesen         ###   ########.fr       */
+/*   Updated: 2020/03/16 19:29:00 by efriesen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@ int		main(int argc, char **argv)
 	init_default_values();
 	list_graph = init_list_graph();
 	list_graph = start_parser(list_graph);
+	if (list_graph->vector->elems == 0)
+		invalid_graph();
 	graph = init_graph(list_graph);
 	algorithm_suurbale(graph, list_graph->vector->names,
 		list_graph->graph_output);

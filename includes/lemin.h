@@ -47,6 +47,7 @@ typedef struct	s_path
 	int size;
 	int max_ways;
 	int max_path;
+	int re_bind;
 	int **ways;
 	int step_elems;
 	int *steps;

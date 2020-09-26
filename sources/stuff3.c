@@ -6,11 +6,30 @@
 /*   By: dgrady <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/15 18:57:31 by dgrady            #+#    #+#             */
-/*   Updated: 2020/03/16 18:14:55 by dgrady           ###   ########.fr       */
+/*   Updated: 2020/03/16 18:28:56 by efriesen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lemin.h"
+
+void	init_path(t_path **paths)
+{
+	t_path	*path;
+	int		i;
+
+	*paths = (t_path*)malloc(sizeof(t_path));
+	path = (*paths);
+	path->max_ways = 100;
+	path->max_path = 100;
+	path->size = 0;
+	path->final_steps = 0;
+	path->step_elems = 0;
+	path->steps = NULL;
+	path->ways = (int**)malloc(sizeof(int*) * path->max_ways);
+	i = -1;
+	while (++i < path->max_ways)
+		path->ways[i] = (int*)malloc(sizeof(int) * path->max_path);
+}
 
 int		get_first(int ants, int way)
 {
@@ -27,15 +46,12 @@ int		**crutch_create_array(int size, int *steps, int **rez)
 	int i;
 	int j;
 	int ants;
-	int check;
 
 	i = 0;
 	ants = 1;
-	check = size - 1;
-	while (ants <= g_ants)
+	while (ants <= g_ants && (j = -1))
 	{
-		j = -1;
-		while (++j <= check)
+		while (++j <= size)
 		{
 			rez[j][i] = ants;
 			ants++;
@@ -43,8 +59,12 @@ int		**crutch_create_array(int size, int *steps, int **rez)
 				break ;
 		}
 		i++;
-		while (check >= 0 && steps[check] == i)
-			check--;
+		while (steps[size] == i)
+		{
+			if (size == 0)
+				break ;
+			size--;
+		}
 	}
 	return (rez);
 }
