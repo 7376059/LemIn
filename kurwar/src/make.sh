@@ -1,0 +1,1 @@
+gcc try_fsm.c -I
