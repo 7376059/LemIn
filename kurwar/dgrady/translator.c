@@ -1,34 +1,8 @@
-#include "../inc/lc.h"
+#include "./lc.h"
 # include "./libft/libft.h"
 #include "stdio.h"
 #include "string.h"
 
-
-t_oper* gen(void);
-
-char	*ft_itoa_base(int value, int base)
-{
-	char	*s;
-	long	n;
-	int		sign;
-	int		i;
-
-	n = (value < 0) ? -(long)value : value;
-	sign = (value < 0 && base == 10) ? -1 : 0;
-	i = (sign == -1) ? 2 : 1;
-	while ((n /= base) >= 1)
-		i++;
-	s = (char*)malloc(sizeof(char) * (i + 1));
-	s[i] = '\0';
-	n = (value < 0) ? -(long)value : value;
-	while (i-- + sign)
-	{
-		s[i] = (n % base < 10) ? n % base + '0' : n % base + 'A' - 10;
-		n /= base;
-	}
-	(i == 0) ? s[i] = '-' : 0;
-	return (s);
-}
 
 
 void	int32_to_bytecode(char *data, int32_t pos, int32_t value, size_t size)
@@ -42,6 +16,62 @@ void	int32_to_bytecode(char *data, int32_t pos, int32_t value, size_t size)
 		i += 8;
 		size--;
 	}
+}
+
+
+t_oper* gen(void)
+{
+    t_oper *oper1;
+    oper1 = (t_oper*)malloc(sizeof(t_oper));
+
+    t_label *l1 = (t_label*)malloc(sizeof(t_label));
+    l1->offset = 0;
+    l1->name = "loop";
+
+    t_com *sti = (t_com*)malloc(sizeof(t_com));
+    sti->label = *l1;
+    sti->code = 11;
+    sti->size = 7;
+
+    //t_arg args =(t_arg)malloc(    sizeof(t_arg));
+
+    //t_arg args1[3] = {{"r1", T_REG}, {"%:live", T_DIR}, {"%1", T_DIR}};
+
+    t_arg *args1 = (t_arg*)malloc(sizeof(t_arg));
+    t_arg *args2 = (t_arg*)malloc(sizeof(t_arg));
+    t_arg *args3 = (t_arg*)malloc(sizeof(t_arg));
+
+    args1->arg_val = "r1";
+    args1->arg_type = T_REG;
+    args1->next = args2;
+
+    args2->arg_val = "%:live";
+    args2->arg_type = T_DIR;
+    args2->next = args3;
+
+    args3->arg_val = "%1";
+    args3->arg_type = T_DIR;
+    args3->next = 0;
+
+    sti->args = args1;
+
+    oper1->com = *sti;
+    oper1->offset = 0;
+    oper1->next = NULL;
+
+
+    printf("%d\n", oper1->com.args->arg_type);
+    printf("%s\n", oper1->com.args->arg_val);
+	
+
+    printf("%d\n", oper1->com.args->next->arg_type);
+    printf("%s\n", oper1->com.args->next->arg_val);
+
+    printf("%d\n", oper1->com.args->next->next->arg_type);
+    printf("%s\n", oper1->com.args->next->next->arg_val);
+    //printf("%s\n", oper1->com.args[1].arg_val);
+    //printf("%s\n", oper1->com.args[2].arg_val);
+    return(oper1);
 }
 
 void trans_start(t_oper* oper, t_nc nc)
@@ -66,42 +96,45 @@ void trans_start(t_oper* oper, t_nc nc)
 
 char *get_exec_code(t_oper *oper)
 {
+	
+	//t_arg args1[3] = {{"r1", T_REG}, {"%:live", T_DIR}, {"%1", T_DIR}};
+	t_arg *temp;
+	int count;
 
-	t_oper *temp;
-
-	temp = oper;
+	temp = oper->com.args;
+	count = 0;
 
 	while(temp)
 	{
-		/*
-		printf("offset = %d\n", temp->offset);
-		printf("code = %d\n", temp->com.code);
-		printf("size = %d\n", temp->com.size);
-		printf("arg_val = %s\n", temp->com.args[0].arg_val);
-		printf("arg_code = %d\n", temp->com.args[0].arg_type);
-		printf("############\n");
-		*/
 		temp = temp->next;
+		
 	}
 
 	return (NULL);
 }
 
-
-
-
-
-
 int main(void)
 {
 
 	t_oper* oper = gen();
-	t_nc nc  = {"BATMANAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\n\ndsfsg", "This city"};	
+	//t_nc nc  = {"BATMANAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\n\ndsfsg", "This city"};	
 
-	char a = 'B';
+	//char a = 'B';
     //printf("%d\n",COREWAR_EXEC_MAGIC);
 	//printf("%s\n", ft_itoa_base(a, 16));
 	//trans_start(oper, nc);
-	 get_exec_code(oper);
+
+	get_exec_code(oper);
 	return 0;
 }
+
+
+// .name       "Batman"
+// .comment    "This city needs me"
+// loop:
+//         sti r1, %:live, %1
+// live:
+//         live %0
+//         ld %0, r2
+//         zjmp %:loop
+
